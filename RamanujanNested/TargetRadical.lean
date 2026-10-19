@@ -1,5 +1,7 @@
-import RamanujanNested.Bounds
-import Mathlib
+module
+
+public import RamanujanNested.Bounds
+public import Mathlib
 
 /-!
 # TargetRadical.lean — a constant-coefficient radical hitting an exact target
@@ -28,13 +30,13 @@ unbounded case entirely rather than resolving it.
 namespace RamanujanNested
 
 /-- The constant coefficient whose fixed point is exactly `t`. -/
-noncomputable def targetCoeff (t : ℝ) : ℝ := t - 1 / t
+@[expose] public noncomputable def targetCoeff (t : ℝ) : ℝ := t - 1 / t
 
 /-- **The defining property, made concrete.** `rStar (targetCoeff t) = t` for
 `t ≥ 1`: the constant-coefficient radical's universal bound *is* the target
 itself. (Check: `N=3` gives `targetCoeff 3 = 8/3`, and
 `rStar (8/3) = (8/3 + √(64/9+36/9))/2 = (8/3+10/3)/2 = 3` — exactly.) -/
-theorem rStar_targetCoeff {t : ℝ} (ht : 1 ≤ t) : rStar (targetCoeff t) = t := by
+public theorem rStar_targetCoeff {t : ℝ} (ht : 1 ≤ t) : rStar (targetCoeff t) = t := by
   have htpos : 0 < t := lt_of_lt_of_le one_pos ht
   unfold rStar targetCoeff
   have hkey : (t - 1 / t) ^ 2 + 4 = (t + 1 / t) ^ 2 := by
@@ -46,14 +48,14 @@ theorem rStar_targetCoeff {t : ℝ} (ht : 1 ≤ t) : rStar (targetCoeff t) = t :
   ring
 
 /-- `targetCoeff t ≥ 0` for `t ≥ 1` — so `Bounds.lean` applies directly. -/
-theorem targetCoeff_nonneg {t : ℝ} (ht : 1 ≤ t) : 0 ≤ targetCoeff t := by
+public theorem targetCoeff_nonneg {t : ℝ} (ht : 1 ≤ t) : 0 ≤ targetCoeff t := by
   unfold targetCoeff
   rw [sub_nonneg, div_le_iff₀ (lt_of_lt_of_le one_pos ht)]
   nlinarith
 
 /-- **Boundedness for the target radical**, directly from `Bounds.lean`:
 every truncation of the constant-`targetCoeff t`-radical lies in `[0, t]`. -/
-theorem targetRadical_bounded {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T) (hTt : T ≤ t) (d : ℕ) :
+public theorem targetRadical_bounded {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T) (hTt : T ≤ t) (d : ℕ) :
     0 ≤ rollUp (fun _ => targetCoeff t) T d ∧ rollUp (fun _ => targetCoeff t) T d ≤ t := by
   have hA : 0 ≤ targetCoeff t := targetCoeff_nonneg ht
   have hStar : rStar (targetCoeff t) = t := rStar_targetCoeff ht
@@ -65,7 +67,7 @@ theorem targetRadical_bounded {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T) (hTt : 
 `ρ = targetCoeff t / t` at every layer — this is the algebraic heart of the
 whole file: conjugate-multiply `t - √(t² - ρ·t·e)` to see the gap divides,
 it doesn't just shrink by inspection. -/
-theorem targetRadical_gap_step {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T) (hTt : T ≤ t) (d : ℕ) :
+public theorem targetRadical_gap_step {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T) (hTt : T ≤ t) (d : ℕ) :
     t - rollUp (fun _ => targetCoeff t) T (d + 1) ≤
       (targetCoeff t / t) * (t - rollUp (fun _ => targetCoeff t) T d) := by
   have htpos : 0 < t := lt_of_lt_of_le one_pos ht
@@ -98,7 +100,7 @@ theorem targetRadical_gap_step {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T) (hTt :
 
 /-- **The geometric error bound**, by induction on `d`: the gap to the exact
 target `t` shrinks geometrically, with explicit ratio `targetCoeff t / t`. -/
-theorem targetRadical_gap_geometric {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T) (hTt : T ≤ t) :
+public theorem targetRadical_gap_geometric {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T) (hTt : T ≤ t) :
     ∀ d : ℕ, t - rollUp (fun _ => targetCoeff t) T d ≤
       (targetCoeff t / t) ^ d * (t - T) := by
   intro d
@@ -118,7 +120,7 @@ theorem targetRadical_gap_geometric {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T) (
 
 /-- The contraction ratio is strictly below `1`: `targetCoeff t < t` always
 (the same fact underlying `Bounds.lean`'s `one_le_rStar`, specialized here). -/
-theorem targetCoeff_ratio_lt_one {t : ℝ} (ht : 1 ≤ t) : targetCoeff t / t < 1 := by
+public theorem targetCoeff_ratio_lt_one {t : ℝ} (ht : 1 ≤ t) : targetCoeff t / t < 1 := by
   have htpos : 0 < t := lt_of_lt_of_le one_pos ht
   rw [div_lt_one htpos]
   unfold targetCoeff
@@ -128,7 +130,7 @@ theorem targetCoeff_ratio_lt_one {t : ℝ} (ht : 1 ≤ t) : targetCoeff t / t < 
 /-- **Convergence to exactly `t`.** Combining the geometric bound with the
 ratio being `< 1`: the constant-`targetCoeff t` radical tends to `t` — not
 merely bounded by it, but converging to it exactly, with an explicit rate. -/
-theorem targetRadical_tendsto {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T) (hTt : T ≤ t) :
+public theorem targetRadical_tendsto {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T) (hTt : T ≤ t) :
     Filter.Tendsto (fun d => rollUp (fun _ => targetCoeff t) T d) Filter.atTop (nhds t) := by
   have hratio_nonneg : 0 ≤ targetCoeff t / t :=
     div_nonneg (targetCoeff_nonneg ht) (le_trans zero_le_one ht)

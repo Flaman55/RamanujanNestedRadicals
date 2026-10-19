@@ -1,6 +1,8 @@
-import RamanujanNested.LinearChainTight
-import RamanujanNested.NthRootChain
-import Mathlib
+module
+
+public import RamanujanNested.LinearChainTight
+public import RamanujanNested.NthRootChain
+public import Mathlib
 
 /-!
 # LinearChainTightNthRoot.lean — the unbounded linear family, tight bound, any root order
@@ -23,7 +25,7 @@ closes the argument at every root order at once.
 namespace RamanujanNested
 
 /-- **Moving-ceiling boundedness, tight shift, any root order.** -/
-theorem rollUpN_linearCoeff_bounded_tight (n : ℕ) (hn : 2 ≤ n) :
+public theorem rollUpN_linearCoeff_bounded_tight (n : ℕ) (hn : 2 ≤ n) :
     ∀ (d : ℕ) (m N T : ℝ), 0 < m → m ≤ 1 → 2 * m ≤ N → 0 ≤ T → T ≤ N + tightShift m →
       0 ≤ rollUpN n (linearCoeff m N) T d ∧
         rollUpN n (linearCoeff m N) T d ≤ N + tightShift m := by
@@ -87,7 +89,7 @@ theorem rollUpN_linearCoeff_bounded_tight (n : ℕ) (hn : 2 ≤ n) :
             mul_one_div, div_self hn_ne, Real.rpow_one]
 
 /-- Specialized to the canonical seed `T = 1`. -/
-theorem linearCoeffN_bounded_tight {n : ℕ} (hn : 2 ≤ n) {m N : ℝ} (hm : 0 < m) (hm1 : m ≤ 1)
+public theorem linearCoeffN_bounded_tight {n : ℕ} (hn : 2 ≤ n) {m N : ℝ} (hm : 0 < m) (hm1 : m ≤ 1)
     (hN : 2 * m ≤ N) (d : ℕ) :
     0 ≤ rollUpN n (linearCoeff m N) 1 d ∧
       rollUpN n (linearCoeff m N) 1 d ≤ N + tightShift m :=
@@ -99,7 +101,7 @@ open Filter Topology
 /-- **Existence of a limit, tight bound, for `0 < m ≤ 1`, at any root order.**
 Generalizes `linearRadical_converges_tight` (`LinearChainTight.lean`, root
 order `2`) to every root order at once. -/
-theorem linearRadicalN_converges_tight {n : ℕ} (hn : 2 ≤ n) {m N : ℝ} (hm : 0 < m)
+public theorem linearRadicalN_converges_tight {n : ℕ} (hn : 2 ≤ n) {m N : ℝ} (hm : 0 < m)
     (hm1 : m ≤ 1) (hN : 2 * m ≤ N) :
     ∃ L : ℝ, Tendsto (fun d => rollUpN n (linearCoeff m N) 1 d) atTop (𝓝 L) ∧
       L ≤ N + tightShift m := by

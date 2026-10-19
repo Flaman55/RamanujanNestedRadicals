@@ -1,5 +1,7 @@
-import RamanujanNested.LinearChain
-import Mathlib
+module
+
+public import RamanujanNested.LinearChain
+public import Mathlib
 
 /-!
 # LinearChainGeneral.lean — existence of a limit for EVERY positive slope
@@ -37,7 +39,7 @@ as `rollUp_linearCoeff_bounded`, but with ceiling `C(N) = N+1` instead of
 `C(N) = N`. The key inequality `1 + a_1(N)·C(N+m) ≤ C(N)²` reduces (after
 expanding) to `0 ≤ N + m + m²`, true for any `m > 0` and `N ≥ 0` — no lower
 bound on `m` is needed, unlike `rollUp_linearCoeff_bounded`. -/
-theorem rollUp_linearCoeff_bounded_general :
+public theorem rollUp_linearCoeff_bounded_general :
     ∀ (d : ℕ) (m N T : ℝ), 0 < m → 2 * m ≤ N → 0 ≤ T → T ≤ N + 1 →
       0 ≤ rollUp (linearCoeff m N) T d ∧ rollUp (linearCoeff m N) T d ≤ N + 1 := by
   intro d
@@ -74,7 +76,7 @@ theorem rollUp_linearCoeff_bounded_general :
       _ = N + 1 := Real.sqrt_sq (by linarith)
 
 /-- Specialized to the canonical seed `T = 1`. -/
-theorem linearCoeff_bounded_general {m N : ℝ} (hm : 0 < m) (hN : 2 * m ≤ N) (d : ℕ) :
+public theorem linearCoeff_bounded_general {m N : ℝ} (hm : 0 < m) (hN : 2 * m ≤ N) (d : ℕ) :
     0 ≤ truncRadical (linearCoeff m N) d ∧ truncRadical (linearCoeff m N) d ≤ N + 1 :=
   rollUp_linearCoeff_bounded_general d m N 1 hm hN (by norm_num) (by linarith)
 
@@ -84,7 +86,7 @@ open Filter Topology
 `LinearChain.lean` left open for `0 < m < 1`. Gives the looser bound `L ≤ N+1`
 rather than `L ≤ N` — use `linearRadical_converges` instead whenever `m ≥ 1`
 is known, for the tighter bound. -/
-theorem linearRadical_converges_general {m N : ℝ} (hm : 0 < m) (hN : 2 * m ≤ N) :
+public theorem linearRadical_converges_general {m N : ℝ} (hm : 0 < m) (hN : 2 * m ≤ N) :
     ∃ L : ℝ, Tendsto (truncRadical (linearCoeff m N)) atTop (𝓝 L) ∧ L ≤ N + 1 := by
   have hnonneg : ∀ k, 0 ≤ linearCoeff m N k := fun k => by
     unfold linearCoeff

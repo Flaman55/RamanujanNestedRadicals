@@ -1,5 +1,7 @@
-import RamanujanNested.UnboundedChain
-import Mathlib
+module
+
+public import RamanujanNested.UnboundedChain
+public import Mathlib
 
 /-!
 # HerschfeldClosure.lean — L(N) = N, exactly
@@ -32,7 +34,7 @@ open Filter Topology
 /-- The limit of the truncated classical-type radical, named (previously
 only established as an anonymous witness inside `classicalRadical_converges`
 in `UnboundedChain.lean`). -/
-noncomputable def limitVal (N : ℝ) : ℝ := ⨆ i, truncRadical (classicalCoeff N) i
+@[expose] public noncomputable def limitVal (N : ℝ) : ℝ := ⨆ i, truncRadical (classicalCoeff N) i
 
 section Basic
 
@@ -50,16 +52,16 @@ private theorem limitVal_mono {N : ℝ} (hN : 2 ≤ N) :
     linarith
   exact truncRadical_monotone (classicalCoeff N) hnonneg
 
-theorem limitVal_tendsto {N : ℝ} (hN : 2 ≤ N) :
+public theorem limitVal_tendsto {N : ℝ} (hN : 2 ≤ N) :
     Tendsto (truncRadical (classicalCoeff N)) atTop (𝓝 (limitVal N)) :=
   tendsto_atTop_ciSup (limitVal_mono hN) (limitVal_bddAbove hN)
 
-theorem limitVal_le {N : ℝ} (hN : 2 ≤ N) : limitVal N ≤ N := by
+public theorem limitVal_le {N : ℝ} (hN : 2 ≤ N) : limitVal N ≤ N := by
   apply ciSup_le
   intro d
   exact (classicalCoeff_bounded (by linarith) d).2
 
-theorem limitVal_ge_one {N : ℝ} (hN : 2 ≤ N) : 1 ≤ limitVal N := by
+public theorem limitVal_ge_one {N : ℝ} (hN : 2 ≤ N) : 1 ≤ limitVal N := by
   have h0 : truncRadical (classicalCoeff N) 0 = 1 := rfl
   rw [← h0]
   exact le_ciSup (limitVal_bddAbove hN) 0
@@ -92,7 +94,7 @@ has the same limit `L(N)` as the original (via `tendsto_succ_atTop`), and
 also equals (pointwise, exactly) `d ↦ √(1+(N-1)·truncRadical (classicalCoeff
 (N+1)) d)`, which tends to `√(1+(N-1)·L(N+1))` by continuity of `√` and of
 the affine map — equate the two limits. -/
-theorem limitVal_functional_eq {N : ℝ} (hN : 2 ≤ N) :
+public theorem limitVal_functional_eq {N : ℝ} (hN : 2 ≤ N) :
     limitVal N = Real.sqrt (1 + (N - 1) * limitVal (N + 1)) := by
   have hN1 : 2 ≤ N + 1 := by linarith
   have hshift_tendsto :
@@ -110,20 +112,20 @@ theorem limitVal_functional_eq {N : ℝ} (hN : 2 ≤ N) :
   exact tendsto_nhds_unique hshift_tendsto hL4
 
 /-- The deficit `δ(N) := N - L(N)`, zero exactly when `L(N) = N`. -/
-noncomputable def deficit (N : ℝ) : ℝ := N - limitVal N
+@[expose] public noncomputable def deficit (N : ℝ) : ℝ := N - limitVal N
 
-theorem deficit_nonneg {N : ℝ} (hN : 2 ≤ N) : 0 ≤ deficit N := by
+public theorem deficit_nonneg {N : ℝ} (hN : 2 ≤ N) : 0 ≤ deficit N := by
   unfold deficit; linarith [limitVal_le hN]
 
 /-- The trivial ceiling: `δ(N) ≤ N-1`, from `L(N) ≥ 1`. This is the ONLY
 independent bound the whole contradiction argument needs. -/
-theorem deficit_le_ceiling {N : ℝ} (hN : 2 ≤ N) : deficit N ≤ N - 1 := by
+public theorem deficit_le_ceiling {N : ℝ} (hN : 2 ≤ N) : deficit N ≤ N - 1 := by
   unfold deficit; linarith [limitVal_ge_one hN]
 
 /-- **The deficit recursion**, `δ(N+1) = δ(N)·(2N-δ(N))/(N-1)`, an exact
 algebraic corollary of the functional equation (square both sides, use
 `(N-1)(N+1) = N²-1`). -/
-theorem deficit_recursion {N : ℝ} (hN : 2 ≤ N) :
+public theorem deficit_recursion {N : ℝ} (hN : 2 ≤ N) :
     deficit (N + 1) = deficit N * (2 * N - deficit N) / (N - 1) := by
   have hFE := limitVal_functional_eq hN
   have hN1pos : (0 : ℝ) < N - 1 := by linarith
@@ -141,7 +143,7 @@ cutoff are needed: the argument uses only the trivial ceiling `δ(N) ≤ N-1`,
 valid everywhere. `δ(N+1)-δ(N) = δ(N)·(N+1-δ(N))/(N-1) ≥ δ(N)·2/(N-1)` (since
 `N+1-δ(N) ≥ 2` follows directly from the ceiling), giving the stated
 multiplicative bound. -/
-theorem deficit_growth {N : ℝ} (hN : 2 ≤ N) :
+public theorem deficit_growth {N : ℝ} (hN : 2 ≤ N) :
     deficit N * (N + 1) / (N - 1) ≤ deficit (N + 1) := by
   have hN1pos : (0 : ℝ) < N - 1 := by linarith
   have hceil : deficit N ≤ N - 1 := deficit_le_ceiling hN
@@ -174,7 +176,7 @@ private theorem quad_step {N₀ M : ℝ} (hN₀ : 2 ≤ N₀) (hM : 2 ≤ M)
 `∏_{i=0}^{j-1} (N₀+i+1)/(N₀+i-1)` telescopes — numerators `N₀+1,…,N₀+j`,
 denominators `N₀-1,…,N₀+j-2` — to exactly `(N₀+j)(N₀+j-1) / (N₀(N₀-1))`,
 proved here by induction via `quad_step`. -/
-theorem deficit_quadratic_lower {N₀ : ℝ} (hN₀ : 2 ≤ N₀) :
+public theorem deficit_quadratic_lower {N₀ : ℝ} (hN₀ : 2 ≤ N₀) :
     ∀ j : ℕ, deficit N₀ * ((N₀ + (j : ℝ)) * (N₀ + (j : ℝ) - 1)) / (N₀ * (N₀ - 1)) ≤
       deficit (N₀ + (j : ℝ)) := by
   have hC0pos : (0 : ℝ) < N₀ * (N₀ - 1) := by nlinarith
@@ -199,7 +201,7 @@ gives a lower bound on `deficit (N+j)` growing like `j²`; `deficit_le_ceiling`
 gives an upper bound growing only like `j`. The Archimedean property picks a
 concrete `j` large enough (`exists_nat_gt`) that the quadratic lower bound
 already exceeds the linear ceiling at that `j` — contradiction. -/
-theorem limitVal_eq_self {N : ℝ} (hN : 2 ≤ N) : limitVal N = N := by
+public theorem limitVal_eq_self {N : ℝ} (hN : 2 ≤ N) : limitVal N = N := by
   by_contra hne
   have hlt : limitVal N < N := lt_of_le_of_ne (limitVal_le hN) hne
   have hδ0_pos : 0 < deficit N := by unfold deficit; linarith

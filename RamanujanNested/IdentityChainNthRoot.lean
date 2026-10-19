@@ -1,4 +1,6 @@
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 # IdentityChainNthRoot.lean — the classical unbounded family, any root order `n ≥ 2`
@@ -62,13 +64,13 @@ open Finset
 
 /-- The alternating-sign polynomial `x^{n-1} - x^{n-2} + ⋯ ± 1`, the same
 polynomial for every `n` regardless of parity. -/
-noncomputable def altSum (n : ℕ) (x : ℝ) : ℝ :=
+@[expose] public noncomputable def altSum (n : ℕ) (x : ℝ) : ℝ :=
   ∑ i ∈ range n, x ^ i * (-1 : ℝ) ^ (n - 1 - i)
 
 /-- **The unifying identity.** An instance of `geom_sum₂_mul` (Mathlib) with
 `y = -1`. Even `n`: `altSum n x * (x+1) = x^n - 1`. Odd `n`:
 `altSum n x * (x+1) = x^n + 1`. -/
-theorem altSum_identity (n : ℕ) (x : ℝ) :
+public theorem altSum_identity (n : ℕ) (x : ℝ) :
     altSum n x * (x + 1) = x ^ n - (-1 : ℝ) ^ n := by
   unfold altSum
   have h := geom_sum₂_mul x (-1 : ℝ) n
@@ -77,16 +79,16 @@ theorem altSum_identity (n : ℕ) (x : ℝ) :
 /-! ## Part 1: the closed-form identity chain, both parities at once -/
 
 /-- The closed form claimed by Algorithm 3, `R_k = N+k-1` (`IdentityChain.lean`). -/
-noncomputable def chainClosedFormS (N k : ℕ) : ℝ := (N : ℝ) + (k : ℝ) - 1
+@[expose] public noncomputable def chainClosedFormS (N k : ℕ) : ℝ := (N : ℝ) + (k : ℝ) - 1
 
-theorem chainS_base (N d : ℕ) : chainClosedFormS N (d + 1) = (N : ℝ) + (d : ℝ) := by
+public theorem chainS_base (N d : ℕ) : chainClosedFormS N (d + 1) = (N : ℝ) + (d : ℝ) := by
   unfold chainClosedFormS; push_cast; ring
 
 /-- **The identity chain, any root order `n ≥ 2`, both parities uniformly.**
 The closed form `R_k = N+k-1` satisfies `R_k = ((-1)^n + altSum n R_k · R_{k+1})^{1/n}`
 for every `k`: the radicand simplifies EXACTLY to `R_k^n` via `altSum_identity`
 (since `R_{k+1} = R_k + 1`), and then `(R_k^n)^{1/n} = R_k` since `R_k ≥ 0`. -/
-theorem chainS_satisfies_recursion {n : ℕ} (hn : 2 ≤ n) (N k : ℕ) (hN : 2 ≤ N) :
+public theorem chainS_satisfies_recursion {n : ℕ} (hn : 2 ≤ n) (N k : ℕ) (hN : 2 ≤ N) :
     chainClosedFormS N k =
       ((-1 : ℝ) ^ n + altSum n (chainClosedFormS N k) * chainClosedFormS N (k + 1)) ^
         (1 / (n : ℝ)) := by
@@ -109,14 +111,14 @@ theorem chainS_satisfies_recursion {n : ℕ} (hn : 2 ≤ n) (N k : ℕ) (hN : 2 
       div_self hn_ne, Real.rpow_one]
   rw [hradicand, hpow_inv]
 
-theorem chainS_hits_target (N : ℕ) : chainClosedFormS N 1 = (N : ℝ) := by
+public theorem chainS_hits_target (N : ℕ) : chainClosedFormS N 1 = (N : ℝ) := by
   unfold chainClosedFormS; push_cast; ring
 
 /-! ## Part 2: existence of a limit for the truncated radical, both parities -/
 
 /-- `altSum n x ≥ 0` for `x ≥ 1`, from the identity plus `x^n ≥ 1 ≥ (-1)^n`. Holds
 for every `n`, not only `n ≥ 2` — `altSum_identity` itself is unconditional in `n`. -/
-theorem altSum_nonneg {n : ℕ} {x : ℝ} (hx : 1 ≤ x) : 0 ≤ altSum n x := by
+public theorem altSum_nonneg {n : ℕ} {x : ℝ} (hx : 1 ≤ x) : 0 ≤ altSum n x := by
   have hid := altSum_identity n x
   have hxp1_pos : (0 : ℝ) < x + 1 := by linarith
   have h1 : (-1 : ℝ) ^ n ≤ 1 := by
@@ -138,7 +140,7 @@ for even `n` (reduces to `altSum n x ≥ 0`); for odd `n` (`n ≥ 3`) needs
 `altSum n x ≥ 2`, which follows from `x^n ≥ x^3 ≥ 2x+1`. This is exactly why
 the odd-`n` forward evaluation from seed `0` fails numerically but seed `1`
 (or any seed `≥ 1`) works: the radicand would go negative starting from `0`. -/
-theorem altSum_shift_ge_one {n : ℕ} (hn : 2 ≤ n) {x : ℝ} (hx : 2 ≤ x) :
+public theorem altSum_shift_ge_one {n : ℕ} (hn : 2 ≤ n) {x : ℝ} (hx : 2 ≤ x) :
     (1 : ℝ) ≤ (-1 : ℝ) ^ n + altSum n x := by
   have hxp1_pos : (0 : ℝ) < x + 1 := by linarith
   have hid : altSum n x * (x + 1) = x ^ n - (-1 : ℝ) ^ n := altSum_identity n x
@@ -168,16 +170,16 @@ theorem altSum_shift_ge_one {n : ℕ} (hn : 2 ≤ n) {x : ℝ} (hx : 2 ≤ x) :
 /-- The coefficient family `a_k = altSum n (N+k-1)`, real `N` (matching
 `UnboundedChain.lean`'s `classicalCoeff`, not `IdentityChain.lean`'s nat `N`,
 since the deficit-growth argument below needs to shift `N` by real amounts). -/
-noncomputable def altCoeffR (n : ℕ) (N : ℝ) (k : ℕ) : ℝ := altSum n (N + (k : ℝ) - 1)
+@[expose] public noncomputable def altCoeffR (n : ℕ) (N : ℝ) (k : ℕ) : ℝ := altSum n (N + (k : ℝ) - 1)
 
 /-- The signed n-th-root nested radical recursion: `(-1)^n` in place of the
 fixed `1` used by `NthRootChain.lean`'s `rollUpN` (that file's bounded-coefficient
 family never needed anything else; this unbounded, sign-sensitive family does). -/
-noncomputable def rollUpNS (n : ℕ) (a : ℕ → ℝ) (T : ℝ) : ℕ → ℝ
+@[expose] public noncomputable def rollUpNS (n : ℕ) (a : ℕ → ℝ) (T : ℝ) : ℕ → ℝ
   | 0 => T
   | (k + 1) => ((-1 : ℝ) ^ n + a 1 * rollUpNS n (fun j => a (j + 1)) T k) ^ (1 / (n : ℝ))
 
-theorem rollUpNS_succ (n : ℕ) (a : ℕ → ℝ) (T : ℝ) (k : ℕ) :
+public theorem rollUpNS_succ (n : ℕ) (a : ℕ → ℝ) (T : ℝ) (k : ℕ) :
     rollUpNS n a T (k + 1) =
       ((-1 : ℝ) ^ n + a 1 * rollUpNS n (fun j => a (j + 1)) T k) ^ (1 / (n : ℝ)) := rfl
 
@@ -185,7 +187,7 @@ theorem rollUpNS_succ (n : ℕ) (a : ℕ → ℝ) (T : ℝ) (k : ℕ) :
 the invariant tracked is `1 ≤ · ≤ N`, not `0 ≤ · ≤ N`: seed `T = 0` genuinely
 breaks for odd `n` (the radicand can go negative), but seed `T ≥ 1` never
 does, by `altSum_shift_ge_one`. -/
-theorem rollUpNS_altCoeffR_bounded {n : ℕ} (hn : 2 ≤ n) :
+public theorem rollUpNS_altCoeffR_bounded {n : ℕ} (hn : 2 ≤ n) :
     ∀ (d : ℕ) (N T : ℝ), 2 ≤ N → 1 ≤ T → T ≤ N →
       1 ≤ rollUpNS n (altCoeffR n N) T d ∧ rollUpNS n (altCoeffR n N) T d ≤ N := by
   intro d
@@ -237,9 +239,9 @@ theorem rollUpNS_altCoeffR_bounded {n : ℕ} (hn : 2 ≤ n) :
               mul_one_div, div_self hn_ne, Real.rpow_one]
 
 /-- The paper's `R_1^{(N)}`, signed family: canonical seed `1`. -/
-noncomputable def truncRadicalNS (n : ℕ) (N : ℝ) (d : ℕ) : ℝ := rollUpNS n (altCoeffR n N) 1 d
+@[expose] public noncomputable def truncRadicalNS (n : ℕ) (N : ℝ) (d : ℕ) : ℝ := rollUpNS n (altCoeffR n N) 1 d
 
-theorem truncRadicalNS_bounded {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) (d : ℕ) :
+public theorem truncRadicalNS_bounded {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) (d : ℕ) :
     1 ≤ truncRadicalNS n N d ∧ truncRadicalNS n N d ≤ N :=
   rollUpNS_altCoeffR_bounded hn d N 1 hN (le_refl 1) (by linarith)
 
@@ -248,7 +250,7 @@ induction (same shift trick as boundedness), using `altSum_shift_ge_one` for
 the base case (this is the step that has no analogue in `NthRootChain.lean`,
 since that file's `+1` convention makes the base case trivial regardless of
 the coefficients' size). -/
-theorem rollUpNS_altCoeffR_step_mono {n : ℕ} (hn : 2 ≤ n) :
+public theorem rollUpNS_altCoeffR_step_mono {n : ℕ} (hn : 2 ≤ n) :
     ∀ (d : ℕ) (N : ℝ), 2 ≤ N →
       rollUpNS n (altCoeffR n N) 1 d ≤ rollUpNS n (altCoeffR n N) 1 (d + 1) := by
   intro d
@@ -295,7 +297,7 @@ theorem rollUpNS_altCoeffR_step_mono {n : ℕ} (hn : 2 ≤ n) :
       linarith [hmul2, hkey]
     exact Real.rpow_le_rpow hradicand_nonneg hradicand_le (by positivity)
 
-theorem truncRadicalNS_monotone {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) :
+public theorem truncRadicalNS_monotone {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) :
     Monotone (truncRadicalNS n N) := by
   apply monotone_nat_of_le_succ
   intro d
@@ -307,7 +309,7 @@ open Filter Topology
 parities.** Generalizes `UnboundedChain.lean`'s `classicalRadical_converges`
 to arbitrary `n`, for the family that makes the identity chain (Part 1)
 exact. -/
-theorem truncRadicalNS_converges {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) :
+public theorem truncRadicalNS_converges {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) :
     ∃ L : ℝ, Tendsto (truncRadicalNS n N) atTop (𝓝 L) ∧ 1 ≤ L ∧ L ≤ N := by
   have hmono := truncRadicalNS_monotone hn hN
   have hbdd : BddAbove (Set.range (truncRadicalNS n N)) := by
@@ -331,19 +333,19 @@ the SAME ratio `(N+1)/(N-1)` as the `n = 2` case from the factorization
 bound `S ≥ (N^n-1)/(N-1)` (from `L(N) ≥ 1` alone) — which for even `n`
 matches `altSum n N`'s own numerator `N^n - 1` exactly. -/
 
-noncomputable def limitValNS (n : ℕ) (N : ℝ) : ℝ := ⨆ d, truncRadicalNS n N d
+@[expose] public noncomputable def limitValNS (n : ℕ) (N : ℝ) : ℝ := ⨆ d, truncRadicalNS n N d
 
-theorem limitValNS_tendsto {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) :
+public theorem limitValNS_tendsto {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) :
     Tendsto (truncRadicalNS n N) atTop (𝓝 (limitValNS n N)) := by
   have hmono := truncRadicalNS_monotone hn hN
   have hbdd : BddAbove (Set.range (truncRadicalNS n N)) := by
     refine ⟨N, ?_⟩; rintro x ⟨d, rfl⟩; exact (truncRadicalNS_bounded hn hN d).2
   exact tendsto_atTop_ciSup hmono hbdd
 
-theorem limitValNS_le {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) : limitValNS n N ≤ N := by
+public theorem limitValNS_le {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) : limitValNS n N ≤ N := by
   apply ciSup_le; intro d; exact (truncRadicalNS_bounded hn hN d).2
 
-theorem limitValNS_ge_one {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) : 1 ≤ limitValNS n N := by
+public theorem limitValNS_ge_one {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) : 1 ≤ limitValNS n N := by
   have h0 : truncRadicalNS n N 0 = (1 : ℝ) := rfl
   have hbdd : BddAbove (Set.range (truncRadicalNS n N)) := by
     refine ⟨N, ?_⟩; rintro x ⟨d, rfl⟩; exact (truncRadicalNS_bounded hn hN d).2
@@ -364,7 +366,7 @@ private theorem tendsto_succ_atTopS : Tendsto (fun d : ℕ => d + 1) atTop atTop
   tendsto_atTop_atTop.mpr (fun b => ⟨b, fun a ha => by omega⟩)
 
 /-- **The functional equation**, uniform in parity via `(-1)^n`. -/
-theorem limitValNS_functional_eq {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) :
+public theorem limitValNS_functional_eq {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) :
     limitValNS n N = ((-1 : ℝ) ^ n + altSum n N * limitValNS n (N + 1)) ^ (1 / (n : ℝ)) := by
   have hN1 : 2 ≤ N + 1 := by linarith
   have hy0_pos : (0 : ℝ) < (-1 : ℝ) ^ n + altSum n N * limitValNS n (N + 1) := by
@@ -391,12 +393,12 @@ theorem limitValNS_functional_eq {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ 
     hcontAt.tendsto.comp (limitValNS_tendsto hn hN1)
   exact tendsto_nhds_unique hshift_tendsto hL4
 
-noncomputable def deficitS (n : ℕ) (N : ℝ) : ℝ := N - limitValNS n N
+@[expose] public noncomputable def deficitS (n : ℕ) (N : ℝ) : ℝ := N - limitValNS n N
 
-theorem deficitS_nonneg {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) : 0 ≤ deficitS n N := by
+public theorem deficitS_nonneg {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) : 0 ≤ deficitS n N := by
   unfold deficitS; linarith [limitValNS_le hn hN]
 
-theorem deficitS_le_ceiling {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) :
+public theorem deficitS_le_ceiling {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) :
     deficitS n N ≤ N - 1 := by
   unfold deficitS; linarith [limitValNS_ge_one hn hN]
 
@@ -431,7 +433,7 @@ private theorem factor_pow_sub (N L : ℝ) (n : ℕ) :
 /-- **The key global growth bound, even `n`.** Reproduces `HerschfeldClosure.lean`'s
 `deficit_growth` ratio `(N+1)/(N-1)` exactly, from the factorization above
 plus `altSum n N * (N+1) = N^n - 1` (the identity, even case). -/
-theorem deficitS_growth_even {n : ℕ} (hn : 2 ≤ n) (hne : Even n) {N : ℝ} (hN : 2 ≤ N) :
+public theorem deficitS_growth_even {n : ℕ} (hn : 2 ≤ n) (hne : Even n) {N : ℝ} (hN : 2 ≤ N) :
     deficitS n N * (N + 1) ≤ deficitS n (N + 1) * (N - 1) := by
   have hNp1pos : (0 : ℝ) < N + 1 := by linarith
   have hL_ge1 := limitValNS_ge_one hn hN
@@ -518,7 +520,7 @@ private theorem quadS_step {n : ℕ} (hn : 2 ≤ n) (hne : Even n) {N₀ M : ℝ
   rw [eq1, eq2] at step
   exact le_trans step hgrow
 
-theorem deficitS_quadratic_lower {n : ℕ} (hn : 2 ≤ n) (hne : Even n) {N₀ : ℝ} (hN₀ : 2 ≤ N₀) :
+public theorem deficitS_quadratic_lower {n : ℕ} (hn : 2 ≤ n) (hne : Even n) {N₀ : ℝ} (hN₀ : 2 ≤ N₀) :
     ∀ j : ℕ, deficitS n N₀ * ((N₀ + (j : ℝ)) * (N₀ + (j : ℝ) - 1)) / (N₀ * (N₀ - 1)) ≤
       deficitS n (N₀ + (j : ℝ)) := by
   have hC0pos : (0 : ℝ) < N₀ * (N₀ - 1) := by nlinarith
@@ -541,7 +543,7 @@ theorem deficitS_quadratic_lower {n : ℕ} (hn : 2 ≤ n) (hne : Even n) {N₀ :
 `n ≥ 2`.** Same contradiction structure as `HerschfeldClosure.lean`: a
 quadratic-in-`j` lower bound on `δ(N+j)` eventually exceeds the linear
 ceiling `δ(N+j) ≤ N+j-1`. -/
-theorem limitValNS_eq_self_even {n : ℕ} (hn : 2 ≤ n) (hne : Even n) {N : ℝ} (hN : 2 ≤ N) :
+public theorem limitValNS_eq_self_even {n : ℕ} (hn : 2 ≤ n) (hne : Even n) {N : ℝ} (hN : 2 ≤ N) :
     limitValNS n N = N := by
   by_contra hne'
   have hlt : limitValNS n N < N := lt_of_le_of_ne (limitValNS_le hn hN) hne'
@@ -651,7 +653,7 @@ private theorem sum_two_over_cube_bound (N₀ : ℝ) (hN₀ : 2 ≤ N₀) :
 
 /-- The per-step shrink factor for odd `n`, relative to the clean
 `(N+1)/(N-1)` ratio of the even case: `1 - 2/(N^n+1) = (N^n-1)/(N^n+1)`. -/
-noncomputable def shrinkFactor (n : ℕ) (N : ℝ) : ℝ := 1 - 2 / (N ^ n + 1)
+@[expose] public noncomputable def shrinkFactor (n : ℕ) (N : ℝ) : ℝ := 1 - 2 / (N ^ n + 1)
 
 private theorem shrinkFactor_nonneg {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 ≤ N) :
     0 ≤ shrinkFactor n N := by
@@ -668,7 +670,7 @@ private theorem shrinkFactor_nonneg {n : ℕ} (hn : 2 ≤ n) {N : ℝ} (hN : 2 �
 `deficitS_growth_even`, but `altSum n N * (N+1) = N^n + 1` (not `N^n - 1`)
 picks up an extra `shrinkFactor n N = (N^n-1)/(N^n+1)` relative to the clean
 ratio. -/
-theorem deficitS_growth_odd {n : ℕ} (hn : 2 ≤ n) (hodd : Odd n) {N : ℝ} (hN : 2 ≤ N) :
+public theorem deficitS_growth_odd {n : ℕ} (hn : 2 ≤ n) (hodd : Odd n) {N : ℝ} (hN : 2 ≤ N) :
     deficitS n N * (N + 1) * shrinkFactor n N ≤ deficitS n (N + 1) * (N - 1) := by
   have hNp1pos : (0 : ℝ) < N + 1 := by linarith
   have hL_ge1 := limitValNS_ge_one hn hN
@@ -836,7 +838,7 @@ private theorem quadS_step_odd {n : ℕ} (hn : 2 ≤ n) (hodd : Odd n) {N₀ M P
 /-- **Quadratic-in-`j` lower bound on the deficit, odd `n`** — same shape as
 `deficitS_quadratic_lower`, carrying the accumulated shrink-factor product
 `∏ i < j, shrinkFactor n (N₀+i)` alongside the quadratic ratio. -/
-theorem deficitS_quadratic_lower_odd {n : ℕ} (hn : 2 ≤ n) (hodd : Odd n) {N₀ : ℝ}
+public theorem deficitS_quadratic_lower_odd {n : ℕ} (hn : 2 ≤ n) (hodd : Odd n) {N₀ : ℝ}
     (hN₀ : 2 ≤ N₀) :
     ∀ j : ℕ, deficitS n N₀ * ((N₀ + (j : ℝ)) * (N₀ + (j : ℝ) - 1)) / (N₀ * (N₀ - 1)) *
         (∏ i ∈ range j, shrinkFactor n (N₀ + (i : ℝ))) ≤ deficitS n (N₀ + (j : ℝ)) := by
@@ -863,7 +865,7 @@ theorem deficitS_quadratic_lower_odd {n : ℕ} (hn : 2 ≤ n) (hodd : Odd n) {N�
 `n ≥ 2` (i.e. `n ≥ 3`).** Same contradiction structure as
 `limitValNS_eq_self_even`, with the extra fixed factor `1/2` from
 `prodShrink_ge_half` absorbed into a doubled threshold for `j`. -/
-theorem limitValNS_eq_self_odd {n : ℕ} (hn : 2 ≤ n) (hodd : Odd n) {N : ℝ} (hN : 2 ≤ N) :
+public theorem limitValNS_eq_self_odd {n : ℕ} (hn : 2 ≤ n) (hodd : Odd n) {N : ℝ} (hN : 2 ≤ N) :
     limitValNS n N = N := by
   by_contra hne'
   have hlt : limitValNS n N < N := lt_of_le_of_ne (limitValNS_le hn hN) hne'

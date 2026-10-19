@@ -1,6 +1,8 @@
-import RamanujanNested.LinearChain
-import RamanujanNested.NthRootChain
-import Mathlib
+module
+
+public import RamanujanNested.LinearChain
+public import RamanujanNested.NthRootChain
+public import Mathlib
 
 /-!
 # LinearChainNthRoot.lean — the unbounded linear family, at any root order n ≥ 2
@@ -32,7 +34,7 @@ namespace RamanujanNested
 /-- **Moving-ceiling boundedness, unbounded linear family, any root order.**
 Same shift-by-`m` structure as `rollUp_linearCoeff_bounded`
 (`LinearChain.lean`), with `rollUpN`/`rpow` in place of `rollUp`/`sqrt`. -/
-theorem rollUpN_linearCoeff_bounded (n : ℕ) (hn : 2 ≤ n) :
+public theorem rollUpN_linearCoeff_bounded (n : ℕ) (hn : 2 ≤ n) :
     ∀ (d : ℕ) (m N T : ℝ), 1 ≤ m → 2 * m ≤ N → 0 ≤ T → T ≤ N →
       0 ≤ rollUpN n (linearCoeff m N) T d ∧ rollUpN n (linearCoeff m N) T d ≤ N := by
   intro d
@@ -80,7 +82,7 @@ theorem rollUpN_linearCoeff_bounded (n : ℕ) (hn : 2 ≤ n) :
             div_self hn_ne, Real.rpow_one]
 
 /-- Specialized to the canonical seed `T = 1`. -/
-theorem linearCoeffN_bounded {n : ℕ} (hn : 2 ≤ n) {m N : ℝ} (hm : 1 ≤ m) (hN : 2 * m ≤ N)
+public theorem linearCoeffN_bounded {n : ℕ} (hn : 2 ≤ n) {m N : ℝ} (hm : 1 ≤ m) (hN : 2 * m ≤ N)
     (d : ℕ) :
     0 ≤ rollUpN n (linearCoeff m N) 1 d ∧ rollUpN n (linearCoeff m N) 1 d ≤ N :=
   rollUpN_linearCoeff_bounded n hn d m N 1 hm hN (by norm_num) (by linarith)
@@ -91,7 +93,7 @@ open Filter Topology
 Generalizes `linearRadical_converges` (`LinearChain.lean`, root order `2`) to
 every root order at once. As there, this gives existence and an upper bound
 `L ≤ N`, not the exact value of `L`. -/
-theorem linearRadicalN_converges {n : ℕ} (hn : 2 ≤ n) {m N : ℝ} (hm : 1 ≤ m)
+public theorem linearRadicalN_converges {n : ℕ} (hn : 2 ≤ n) {m N : ℝ} (hm : 1 ≤ m)
     (hN : 2 * m ≤ N) :
     ∃ L : ℝ, Tendsto (fun d => rollUpN n (linearCoeff m N) 1 d) atTop (𝓝 L) ∧ L ≤ N := by
   have hnonneg : ∀ k, 0 ≤ linearCoeff m N k := fun k => by

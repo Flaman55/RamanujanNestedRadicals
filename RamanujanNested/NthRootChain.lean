@@ -1,5 +1,7 @@
-import RamanujanNested.Defs
-import Mathlib
+module
+
+public import RamanujanNested.Defs
+public import Mathlib
 
 /-!
 # NthRootChain.lean — Section 4.1 generalized from square roots to any root order n ≥ 2
@@ -45,18 +47,18 @@ namespace RamanujanNested
 
 /-- The n-th-root nested radical recursion, generalizing `rollUp` (`Defs.lean`,
 which is exactly the case `n = 2` up to `Real.sqrt` vs `Real.rpow`). -/
-noncomputable def rollUpN (n : ℕ) (a : ℕ → ℝ) (T : ℝ) : ℕ → ℝ
+@[expose] public noncomputable def rollUpN (n : ℕ) (a : ℕ → ℝ) (T : ℝ) : ℕ → ℝ
   | 0 => T
   | (k + 1) => (1 + a 1 * rollUpN n (fun j => a (j + 1)) T k) ^ (1 / (n : ℝ))
 
-theorem rollUpN_succ (n : ℕ) (a : ℕ → ℝ) (T : ℝ) (k : ℕ) :
+public theorem rollUpN_succ (n : ℕ) (a : ℕ → ℝ) (T : ℝ) (k : ℕ) :
     rollUpN n a T (k + 1) =
       (1 + a 1 * rollUpN n (fun j => a (j + 1)) T k) ^ (1 / (n : ℝ)) := rfl
 
 /-- Nonnegativity, standalone and reusable. Needed explicitly (unlike the
 `n = 2` case) since `Real.rpow` is not automatically nonneg on a negative
 base the way `Real.sqrt` is — see the file docstring. -/
-theorem rollUpN_nonneg (n : ℕ) :
+public theorem rollUpN_nonneg (n : ℕ) :
     ∀ (d : ℕ) (a : ℕ → ℝ) (T : ℝ), 0 ≤ T → (∀ k, 0 ≤ a k) → 0 ≤ rollUpN n a T d := by
   intro d
   induction d with
@@ -77,7 +79,7 @@ with the compatibility hypothesis directly in `rpow` form so the induction
 itself never needs to convert between `rpow` and ordinary `pow` — that
 conversion is confined to `exists_ceiling_rpow` below, where a concrete `r`
 is produced. -/
-theorem rollUpN_bounded {n : ℕ} {A r : ℝ} (hA : 0 ≤ A)
+public theorem rollUpN_bounded {n : ℕ} {A r : ℝ} (hA : 0 ≤ A)
     (hceil : (1 + A * r) ^ (1 / (n : ℝ)) ≤ r) :
     ∀ (d : ℕ) (T : ℝ) (a : ℕ → ℝ), 0 ≤ T → T ≤ r → (∀ k, 0 ≤ a k) → (∀ k, a k ≤ A) →
       0 ≤ rollUpN n a T d ∧ rollUpN n a T d ≤ r := by
@@ -110,7 +112,7 @@ and ordinary `pow`: `(r^n)^(1/n) = r` for `r ≥ 0` (`Real.rpow_natCast` +
 `Real.rpow_mul` + `Real.rpow_one`), combined with the elementary polynomial
 bound `(A+2)^n ≥ (A+2)^2 ≥ A(A+2)+1` (the first step since `A+2 ≥ 1` and
 `n ≥ 2`, the second by direct expansion). -/
-theorem exists_ceiling_rpow {n : ℕ} (hn : 2 ≤ n) {A : ℝ} (hA : 0 ≤ A) :
+public theorem exists_ceiling_rpow {n : ℕ} (hn : 2 ≤ n) {A : ℝ} (hA : 0 ≤ A) :
     ∃ r : ℝ, 0 ≤ r ∧ 1 ≤ r ∧ (1 + A * r) ^ (1 / (n : ℝ)) ≤ r := by
   refine ⟨A + 2, by linarith, by linarith, ?_⟩
   have hr_nonneg : (0:ℝ) ≤ A + 2 := by linarith
@@ -130,7 +132,7 @@ theorem exists_ceiling_rpow {n : ℕ} (hn : 2 ≤ n) {A : ℝ} (hA : 0 ≤ A) :
     _ = A + 2 := hrpow_eq
 
 /-- Specialized to the canonical seed `T = 1`. -/
-theorem truncRadicalN_bounded {n : ℕ} (hn : 2 ≤ n) {A : ℝ} (hA : 0 ≤ A)
+public theorem truncRadicalN_bounded {n : ℕ} (hn : 2 ≤ n) {A : ℝ} (hA : 0 ≤ A)
     (a : ℕ → ℝ) (ha_nonneg : ∀ k, 0 ≤ a k) (ha_le : ∀ k, a k ≤ A) (d : ℕ) :
     ∃ r : ℝ, 0 ≤ rollUpN n a 1 d ∧ rollUpN n a 1 d ≤ r := by
   obtain ⟨r, _, hr1, hceil⟩ := exists_ceiling_rpow hn hA
@@ -141,7 +143,7 @@ the value (canonical seed `1`), provided every coefficient is nonnegative —
 same structure as `rollUp_seed_one_step_mono` (`Monotone.lean`), with
 `Real.rpow_le_rpow` in place of `Real.sqrt_le_sqrt` and `Real.one_rpow` in
 place of `Real.sqrt_one`. -/
-theorem rollUpN_seed_one_step_mono (n : ℕ) :
+public theorem rollUpN_seed_one_step_mono (n : ℕ) :
     ∀ (N : ℕ) (a : ℕ → ℝ), (∀ k, 0 ≤ a k) →
       rollUpN n a 1 N ≤ rollUpN n a 1 (N + 1) := by
   intro N
@@ -174,7 +176,7 @@ theorem rollUpN_seed_one_step_mono (n : ℕ) :
 
 /-- `rollUpN n a 1` is monotone in the truncation depth, for nonnegative
 coefficients — the monotonicity half for general root order `n`. -/
-theorem truncRadicalN_monotone (n : ℕ) (a : ℕ → ℝ) (ha : ∀ k, 0 ≤ a k) :
+public theorem truncRadicalN_monotone (n : ℕ) (a : ℕ → ℝ) (ha : ∀ k, 0 ≤ a k) :
     Monotone (fun N => rollUpN n a 1 N) := by
   apply monotone_nat_of_le_succ
   intro N
@@ -186,7 +188,7 @@ open Filter Topology
 coefficient sequence with `0 ≤ a_k ≤ A`, the n-th-root truncated radical
 (canonical seed `1`) converges to a finite real limit as depth `→ ∞` — the
 `n = 2` conclusion of `Convergence.lean`, generalized to arbitrary `n`. -/
-theorem truncRadicalN_converges {n : ℕ} (hn : 2 ≤ n) {A : ℝ} (hA : 0 ≤ A)
+public theorem truncRadicalN_converges {n : ℕ} (hn : 2 ≤ n) {A : ℝ} (hA : 0 ≤ A)
     (a : ℕ → ℝ) (ha_nonneg : ∀ k, 0 ≤ a k) (ha_le : ∀ k, a k ≤ A) :
     ∃ L : ℝ, Tendsto (fun N => rollUpN n a 1 N) atTop (𝓝 L) := by
   obtain ⟨r, _, hr1, hceil⟩ := exists_ceiling_rpow hn hA

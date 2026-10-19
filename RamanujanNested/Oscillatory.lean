@@ -1,6 +1,8 @@
-import RamanujanNested.ControlledNegative
-import RamanujanNested.Convergence
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+module
+
+public import RamanujanNested.ControlledNegative
+public import RamanujanNested.Convergence
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 
 /-!
 # Oscillatory.lean — Appendix A.2, oscillatory coefficients
@@ -28,10 +30,10 @@ inequality. We make this precise.
 namespace RamanujanNested
 
 /-- The oscillatory coefficient family from Appendix A.2. -/
-noncomputable def oscillatoryCoeff (α : ℝ) (k : ℕ) : ℝ := 1 + α * Real.sin (k : ℝ)
+@[expose] public noncomputable def oscillatoryCoeff (α : ℝ) (k : ℕ) : ℝ := 1 + α * Real.sin (k : ℝ)
 
 /-- Unconditional two-sided bound: `1 - α ≤ a_k ≤ 1 + α`. -/
-theorem oscillatory_bounds {α : ℝ} (hα : 0 ≤ α) (k : ℕ) :
+public theorem oscillatory_bounds {α : ℝ} (hα : 0 ≤ α) (k : ℕ) :
     1 - α ≤ oscillatoryCoeff α k ∧ oscillatoryCoeff α k ≤ 1 + α := by
   unfold oscillatoryCoeff
   have hlo := Real.neg_one_le_sin (k : ℝ)
@@ -42,7 +44,7 @@ theorem oscillatory_bounds {α : ℝ} (hα : 0 ≤ α) (k : ℕ) :
 
 /-- For `0 ≤ α ≤ 1`, `a_k ≥ 1 - α ≥ 0`, so the simple (no-negative-coefficient)
 machinery already gives convergence — Lemma 1 isn't needed in this regime. -/
-theorem oscillatory_converges_small_alpha {α : ℝ} (hα0 : 0 ≤ α) (hα1 : α ≤ 1) :
+public theorem oscillatory_converges_small_alpha {α : ℝ} (hα0 : 0 ≤ α) (hα1 : α ≤ 1) :
     ∃ L : ℝ, Filter.Tendsto (truncRadical (oscillatoryCoeff α)) Filter.atTop (nhds L) := by
   have hA : (0 : ℝ) ≤ 1 + α := by linarith
   have ha_nonneg : ∀ k, 0 ≤ oscillatoryCoeff α k := fun k => by
@@ -53,7 +55,7 @@ theorem oscillatory_converges_small_alpha {α : ℝ} (hα0 : 0 ≤ α) (hα1 : �
 /-- General `α ≥ 0`: the paper's admissibility condition, made explicit, via
 Lemma 1. Realness (nonnegative radicand at every step) and boundedness both
 follow once `α ≤ 1 / rStar (1+α)` is supplied. -/
-theorem oscillatory_controlled_negative {α : ℝ} (hα : 0 ≤ α)
+public theorem oscillatory_controlled_negative {α : ℝ} (hα : 0 ≤ α)
     (hadm : α ≤ 1 / rStar (1 + α)) (T : ℝ) (hT0 : 0 ≤ T) (hTA : T ≤ rStar (1 + α)) :
     ∀ d, (0 ≤ rollUp (oscillatoryCoeff α) T d ∧
             rollUp (oscillatoryCoeff α) T d ≤ rStar (1 + α)) ∧
@@ -70,7 +72,7 @@ theorem oscillatory_controlled_negative {α : ℝ} (hα : 0 ≤ α)
 `oscillatory_controlled_negative` is discharged by direct computation
 (`rStar (1.1) ≤ 2`, so `1/rStar(1.1) ≥ 1/2 ≥ 1/10`), giving a fully closed
 corollary with no remaining hypotheses on `α`. -/
-theorem oscillatory_alpha_tenth_admissible :
+public theorem oscillatory_alpha_tenth_admissible :
     (1 : ℝ) / 10 ≤ 1 / rStar (1 + 1 / 10) := by
   have hA : (0 : ℝ) ≤ 1 + 1 / 10 := by norm_num
   have hrpos : (0 : ℝ) < rStar (1 + 1 / 10) := lt_of_lt_of_le one_pos (one_le_rStar hA)

@@ -1,4 +1,6 @@
-import RamanujanNested.Defs
+module
+
+public import RamanujanNested.Defs
 
 /-!
 # Bounds.lean — Section 4.1's main sufficient condition
@@ -32,7 +34,7 @@ namespace RamanujanNested
 `a` satisfying `a k ≤ A` pointwise, and any seed `T ∈ [0, r*]`, the truncated
 radical `rollUp a T d` stays in `[0, r*]`. (See the file docstring for why no
 lower bound on `a` is needed here.) -/
-theorem rollUp_bounded {A T : ℝ} (hA : 0 ≤ A) (hT0 : 0 ≤ T) (hTA : T ≤ rStar A) :
+public theorem rollUp_bounded {A T : ℝ} (hA : 0 ≤ A) (hT0 : 0 ≤ T) (hTA : T ≤ rStar A) :
     ∀ (d : ℕ) (a : ℕ → ℝ), (∀ k, a k ≤ A) →
       0 ≤ rollUp a T d ∧ rollUp a T d ≤ rStar A := by
   intro d
@@ -59,7 +61,7 @@ theorem rollUp_bounded {A T : ℝ} (hA : 0 ≤ A) (hT0 : 0 ≤ T) (hTA : T ≤ r
 /-- `r* ≥ 1` whenever `A ≥ 0` — needed to justify the canonical seed `T = 1`
 sits inside `[0, r*]`. `rStar_sq` gives `r*² = 1 + A r* ≥ 1`, so `r* ≥ 1` since
 `r* ≥ 0`. -/
-theorem one_le_rStar {A : ℝ} (hA : 0 ≤ A) : 1 ≤ rStar A := by
+public theorem one_le_rStar {A : ℝ} (hA : 0 ≤ A) : 1 ≤ rStar A := by
   unfold rStar
   have h1 : (4 : ℝ) ≤ A ^ 2 + 4 := by nlinarith [sq_nonneg A]
   have h2 : Real.sqrt 4 ≤ Real.sqrt (A ^ 2 + 4) := Real.sqrt_le_sqrt h1
@@ -70,7 +72,7 @@ theorem one_le_rStar {A : ℝ} (hA : 0 ≤ A) : 1 ≤ rStar A := by
 
 /-- Applying `rollUp_bounded` with the canonical seed `T = 1`: every truncation
 `truncRadical a N` (the paper's `R_1^{(N)}`) lies in `[0, r*]`. -/
-theorem truncRadical_bounded {A : ℝ} (hA : 0 ≤ A) (N : ℕ) (a : ℕ → ℝ)
+public theorem truncRadical_bounded {A : ℝ} (hA : 0 ≤ A) (N : ℕ) (a : ℕ → ℝ)
     (ha_le : ∀ k, a k ≤ A) :
     0 ≤ truncRadical a N ∧ truncRadical a N ≤ rStar A :=
   rollUp_bounded hA (by norm_num) (one_le_rStar hA) N a ha_le

@@ -1,6 +1,8 @@
-import RamanujanNested.LinearChainGeneral
-import RamanujanNested.NthRootChain
-import Mathlib
+module
+
+public import RamanujanNested.LinearChainGeneral
+public import RamanujanNested.NthRootChain
+public import Mathlib
 
 /-!
 # LinearChainGeneralNthRoot.lean — the unbounded linear family, ALL slopes, any root order
@@ -22,7 +24,7 @@ inequality closes the argument at every root order at once.
 namespace RamanujanNested
 
 /-- **Moving-ceiling boundedness, ALL positive slopes, any root order.** -/
-theorem rollUpN_linearCoeff_bounded_general (n : ℕ) (hn : 2 ≤ n) :
+public theorem rollUpN_linearCoeff_bounded_general (n : ℕ) (hn : 2 ≤ n) :
     ∀ (d : ℕ) (m N T : ℝ), 0 < m → 2 * m ≤ N → 0 ≤ T → T ≤ N + 1 →
       0 ≤ rollUpN n (linearCoeff m N) T d ∧ rollUpN n (linearCoeff m N) T d ≤ N + 1 := by
   intro d
@@ -70,7 +72,7 @@ theorem rollUpN_linearCoeff_bounded_general (n : ℕ) (hn : 2 ≤ n) :
             div_self hn_ne, Real.rpow_one]
 
 /-- Specialized to the canonical seed `T = 1`. -/
-theorem linearCoeffN_bounded_general {n : ℕ} (hn : 2 ≤ n) {m N : ℝ} (hm : 0 < m)
+public theorem linearCoeffN_bounded_general {n : ℕ} (hn : 2 ≤ n) {m N : ℝ} (hm : 0 < m)
     (hN : 2 * m ≤ N) (d : ℕ) :
     0 ≤ rollUpN n (linearCoeff m N) 1 d ∧ rollUpN n (linearCoeff m N) 1 d ≤ N + 1 :=
   rollUpN_linearCoeff_bounded_general n hn d m N 1 hm hN (by norm_num) (by linarith)
@@ -80,7 +82,7 @@ open Filter Topology
 /-- **Existence of a limit for EVERY positive slope, at any root order.**
 Generalizes `linearRadical_converges_general` (`LinearChainGeneral.lean`,
 root order `2`) to every root order at once. -/
-theorem linearRadicalN_converges_general {n : ℕ} (hn : 2 ≤ n) {m N : ℝ} (hm : 0 < m)
+public theorem linearRadicalN_converges_general {n : ℕ} (hn : 2 ≤ n) {m N : ℝ} (hm : 0 < m)
     (hN : 2 * m ≤ N) :
     ∃ L : ℝ, Tendsto (fun d => rollUpN n (linearCoeff m N) 1 d) atTop (𝓝 L) ∧ L ≤ N + 1 := by
   have hnonneg : ∀ k, 0 ≤ linearCoeff m N k := fun k => by

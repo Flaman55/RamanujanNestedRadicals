@@ -1,6 +1,8 @@
-import RamanujanNested.Bounds
-import RamanujanNested.Monotone
-import Mathlib
+module
+
+public import RamanujanNested.Bounds
+public import RamanujanNested.Monotone
+public import Mathlib
 
 /-!
 # Convergence.lean — Section 4.1's actual conclusion
@@ -20,7 +22,7 @@ open Filter Topology
 nonnegative, the truncated radical `truncRadical a N` converges to a finite
 real limit as `N → ∞`. This is the paper's actual stated conclusion for
 Section 4.1's main sufficient condition. -/
-theorem truncRadical_converges {A : ℝ} (hA : 0 ≤ A) (a : ℕ → ℝ)
+public theorem truncRadical_converges {A : ℝ} (hA : 0 ≤ A) (a : ℕ → ℝ)
     (ha_nonneg : ∀ k, 0 ≤ a k) (ha_le : ∀ k, a k ≤ A) :
     ∃ L : ℝ, Tendsto (truncRadical a) atTop (𝓝 L) := by
   have hmono : Monotone (truncRadical a) := truncRadical_monotone a ha_nonneg

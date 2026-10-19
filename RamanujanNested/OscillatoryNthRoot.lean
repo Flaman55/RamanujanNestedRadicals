@@ -1,6 +1,8 @@
-import RamanujanNested.Oscillatory
-import RamanujanNested.NthRootChain
-import Mathlib
+module
+
+public import RamanujanNested.Oscillatory
+public import RamanujanNested.NthRootChain
+public import Mathlib
 
 /-!
 # OscillatoryNthRoot.lean — the oscillatory coefficient family, at any root order n ≥ 2
@@ -19,7 +21,7 @@ namespace RamanujanNested
 /-- **Convergence of the oscillatory family, small amplitude, any root order.**
 Generalizes `oscillatory_converges_small_alpha` (root order `2`) to any fixed
 `n ≥ 2`. -/
-theorem oscillatoryN_converges_small_alpha (n : ℕ) (hn : 2 ≤ n) {α : ℝ} (hα0 : 0 ≤ α)
+public theorem oscillatoryN_converges_small_alpha (n : ℕ) (hn : 2 ≤ n) {α : ℝ} (hα0 : 0 ≤ α)
     (hα1 : α ≤ 1) :
     ∃ L : ℝ, Filter.Tendsto (fun d => rollUpN n (oscillatoryCoeff α) 1 d)
       Filter.atTop (nhds L) := by

@@ -1,7 +1,9 @@
-import RamanujanNested.Bounds
-import RamanujanNested.Monotone
-import RamanujanNested.UnboundedChain
-import Mathlib
+module
+
+public import RamanujanNested.Bounds
+public import RamanujanNested.Monotone
+public import RamanujanNested.UnboundedChain
+public import Mathlib
 
 /-!
 # LinearChain.lean — existence of a limit for ANY linear-growth slope, not just slope 1
@@ -44,9 +46,9 @@ namespace RamanujanNested
 /-- A linear-growth coefficient family with general slope `m`, generalizing
 `classicalCoeff` (`UnboundedChain.lean`), which is exactly the case `m = 1`:
 `linearCoeff 1 N = classicalCoeff N`. -/
-noncomputable def linearCoeff (m N : ℝ) (k : ℕ) : ℝ := N + m * ((k : ℝ) - 2)
+@[expose] public noncomputable def linearCoeff (m N : ℝ) (k : ℕ) : ℝ := N + m * ((k : ℝ) - 2)
 
-theorem linearCoeff_one_eq_classicalCoeff (N : ℝ) :
+public theorem linearCoeff_one_eq_classicalCoeff (N : ℝ) :
     linearCoeff 1 N = classicalCoeff N := by
   funext k
   unfold linearCoeff classicalCoeff
@@ -59,7 +61,7 @@ a family with parameter shifted the same way. The key algebraic fact that
 replaces `UnboundedChain.lean`'s exact identity `(N-1)(N+1)+1 = N²` is the
 *inequality* `(N-m)(N+m)+1 ≤ N²`, i.e. `1 ≤ m²` — which is why `m ≥ 1` is
 required (and where the argument would break for `0 < m < 1`). -/
-theorem rollUp_linearCoeff_bounded :
+public theorem rollUp_linearCoeff_bounded :
     ∀ (d : ℕ) (m N T : ℝ), 1 ≤ m → 2 * m ≤ N → 0 ≤ T → T ≤ N →
       0 ≤ rollUp (linearCoeff m N) T d ∧ rollUp (linearCoeff m N) T d ≤ N := by
   intro d
@@ -96,7 +98,7 @@ theorem rollUp_linearCoeff_bounded :
       _ = N := Real.sqrt_sq (by linarith)
 
 /-- Specialized to the canonical seed `T = 1`. -/
-theorem linearCoeff_bounded {m N : ℝ} (hm : 1 ≤ m) (hN : 2 * m ≤ N) (d : ℕ) :
+public theorem linearCoeff_bounded {m N : ℝ} (hm : 1 ≤ m) (hN : 2 * m ≤ N) (d : ℕ) :
     0 ≤ truncRadical (linearCoeff m N) d ∧ truncRadical (linearCoeff m N) d ≤ N :=
   rollUp_linearCoeff_bounded d m N 1 hm hN (by norm_num) (by linarith)
 
@@ -106,7 +108,7 @@ open Filter Topology
 `classicalRadical_converges` (`UnboundedChain.lean`, the case `m = 1`) to the
 whole family of slopes `m ≥ 1`. As there, this gives existence and an upper
 bound `L ≤ N`, not the exact value of `L`. -/
-theorem linearRadical_converges {m N : ℝ} (hm : 1 ≤ m) (hN : 2 * m ≤ N) :
+public theorem linearRadical_converges {m N : ℝ} (hm : 1 ≤ m) (hN : 2 * m ≤ N) :
     ∃ L : ℝ, Tendsto (truncRadical (linearCoeff m N)) atTop (𝓝 L) ∧ L ≤ N := by
   have hnonneg : ∀ k, 0 ≤ linearCoeff m N k := fun k => by
     unfold linearCoeff
@@ -128,7 +130,7 @@ theorem linearRadical_converges {m N : ℝ} (hm : 1 ≤ m) (hN : 2 * m ≤ N) :
 /-- Sanity check: at `m = 1`, this specializes to exactly
 `classicalRadical_converges`'s conclusion, confirming `LinearChain.lean`
 genuinely generalizes `UnboundedChain.lean` rather than duplicating it. -/
-theorem linearRadical_converges_one {N : ℝ} (hN : 2 ≤ N) :
+public theorem linearRadical_converges_one {N : ℝ} (hN : 2 ≤ N) :
     ∃ L : ℝ, Tendsto (truncRadical (classicalCoeff N)) atTop (𝓝 L) ∧ L ≤ N := by
   rw [← linearCoeff_one_eq_classicalCoeff]
   exact linearRadical_converges (le_refl 1) (by linarith)

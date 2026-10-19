@@ -1,6 +1,8 @@
-import RamanujanNested.LinearChain
-import RamanujanNested.LinearChainGeneral
-import Mathlib
+module
+
+public import RamanujanNested.LinearChain
+public import RamanujanNested.LinearChainGeneral
+public import Mathlib
 
 /-!
 # LinearChainTight.lean — the OPTIMAL bound for `0 < m ≤ 1`, closing the gap for real
@@ -49,12 +51,12 @@ namespace RamanujanNested
 /-- The exact minimal ceiling shift for slope `m`: the positive root of
 `s²+3ms+m²=1`. Well-defined for any real `m`; only used here for `m ≤ 1`,
 where it is nonnegative (`tightShift_nonneg`). -/
-noncomputable def tightShift (m : ℝ) : ℝ := (Real.sqrt (5 * m ^ 2 + 4) - 3 * m) / 2
+@[expose] public noncomputable def tightShift (m : ℝ) : ℝ := (Real.sqrt (5 * m ^ 2 + 4) - 3 * m) / 2
 
 /-- The defining algebraic identity, unconditional in `m`: follows purely
 from `Real.sqrt (5m²+4) ^ 2 = 5m²+4` (valid since `5m²+4 ≥ 0` always) by
 straightforward expansion. -/
-theorem tightShift_sq_eq (m : ℝ) :
+public theorem tightShift_sq_eq (m : ℝ) :
     (tightShift m) ^ 2 + 3 * m * (tightShift m) + m ^ 2 = 1 := by
   have hnn : (0:ℝ) ≤ 5 * m ^ 2 + 4 := by nlinarith [sq_nonneg m]
   have hr2 : Real.sqrt (5 * m ^ 2 + 4) ^ 2 = 5 * m ^ 2 + 4 := Real.sq_sqrt hnn
@@ -64,7 +66,7 @@ theorem tightShift_sq_eq (m : ℝ) :
 /-- `s(m) ≥ 0` exactly when `m ≤ 1`: comparing `(3m)² = 9m² ≤ 5m²+4` (which
 holds iff `m² ≤ 1`, i.e. `m ≤ 1` together with `m ≥ -1`, but for `m ≤ 0` the
 bound `3m ≤ 0 ≤ √(5m²+4)` is immediate anyway) against `√(5m²+4)`. -/
-theorem tightShift_nonneg {m : ℝ} (hm1 : m ≤ 1) : 0 ≤ tightShift m := by
+public theorem tightShift_nonneg {m : ℝ} (hm1 : m ≤ 1) : 0 ≤ tightShift m := by
   unfold tightShift
   rcases le_or_gt m 0 with hm0 | hm0
   · have hr_nonneg : (0:ℝ) ≤ Real.sqrt (5 * m ^ 2 + 4) := Real.sqrt_nonneg _
@@ -79,7 +81,7 @@ theorem tightShift_nonneg {m : ℝ} (hm1 : m ≤ 1) : 0 ≤ tightShift m := by
 
 /-- Sanity check: at `m = 1`, the exact shift is `0`, recovering
 `LinearChain.lean`'s ceiling exactly. -/
-theorem tightShift_one : tightShift 1 = 0 := by
+public theorem tightShift_one : tightShift 1 = 0 := by
   have hr : Real.sqrt (5 * (1:ℝ) ^ 2 + 4) = 3 := by
     rw [show (5 * (1:ℝ) ^ 2 + 4) = 3 ^ 2 by norm_num]
     exact Real.sqrt_sq (by norm_num)
@@ -92,7 +94,7 @@ whenever `N ≥ 2m`: at the worst case `N = 2m`, this says
 `1 ≤ 2m + tightShift m`, i.e. `√(5m²+4) ≥ 2-m` — true because squaring both
 (nonnegative, for `0 < m ≤ 1`) sides gives `5m²+4 ≥ (2-m)² = 4-4m+m²`, i.e.
 `4m²+4m ≥ 0`, true for `m > 0`. -/
-theorem tightShift_seed_le {m : ℝ} (hm : 0 < m) (hm1 : m ≤ 1) :
+public theorem tightShift_seed_le {m : ℝ} (hm : 0 < m) (hm1 : m ≤ 1) :
     1 ≤ 2 * m + tightShift m := by
   unfold tightShift
   have h2m_nonneg : (0:ℝ) ≤ 2 - m := by linarith
@@ -105,7 +107,7 @@ theorem tightShift_seed_le {m : ℝ} (hm : 0 < m) (hm1 : m ≤ 1) :
 shift-by-`m` recursive structure as `rollUp_linearCoeff_bounded` and
 `rollUp_linearCoeff_bounded_general`, but with the *exact* minimal ceiling
 `C(N) = N + tightShift m`. -/
-theorem rollUp_linearCoeff_bounded_tight :
+public theorem rollUp_linearCoeff_bounded_tight :
     ∀ (d : ℕ) (m N T : ℝ), 0 < m → m ≤ 1 → 2 * m ≤ N → 0 ≤ T → T ≤ N + tightShift m →
       0 ≤ rollUp (linearCoeff m N) T d ∧ rollUp (linearCoeff m N) T d ≤ N + tightShift m := by
   intro d
@@ -152,7 +154,7 @@ theorem rollUp_linearCoeff_bounded_tight :
       _ = N + tightShift m := Real.sqrt_sq (by linarith [hs_nonneg])
 
 /-- Specialized to the canonical seed `T = 1`. -/
-theorem linearCoeff_bounded_tight {m N : ℝ} (hm : 0 < m) (hm1 : m ≤ 1) (hN : 2 * m ≤ N)
+public theorem linearCoeff_bounded_tight {m N : ℝ} (hm : 0 < m) (hm1 : m ≤ 1) (hN : 2 * m ≤ N)
     (d : ℕ) :
     0 ≤ truncRadical (linearCoeff m N) d ∧
       truncRadical (linearCoeff m N) d ≤ N + tightShift m :=
@@ -165,7 +167,7 @@ open Filter Topology
 with `LinearChain.lean`'s `linearRadical_converges` (for `m ≥ 1`), this gives
 the tightest bound this technique provides across the ENTIRE positive-slope
 range, with no remaining gap. -/
-theorem linearRadical_converges_tight {m N : ℝ} (hm : 0 < m) (hm1 : m ≤ 1) (hN : 2 * m ≤ N) :
+public theorem linearRadical_converges_tight {m N : ℝ} (hm : 0 < m) (hm1 : m ≤ 1) (hN : 2 * m ≤ N) :
     ∃ L : ℝ, Tendsto (truncRadical (linearCoeff m N)) atTop (𝓝 L) ∧ L ≤ N + tightShift m := by
   have hnonneg : ∀ k, 0 ≤ linearCoeff m N k := fun k => by
     unfold linearCoeff

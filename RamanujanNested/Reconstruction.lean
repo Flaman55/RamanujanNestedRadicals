@@ -1,4 +1,6 @@
-import RamanujanNested.IdentityChain
+module
+
+public import RamanujanNested.IdentityChain
 
 /-!
 # Reconstruction.lean — Algorithm 4, the general inverse construction
@@ -17,14 +19,14 @@ namespace RamanujanNested
 
 /-- Algorithm 4: the coefficient that makes `R k` satisfy the recursion,
 given the next value `R (k+1)`. -/
-noncomputable def reconstructCoeff (R : ℕ → ℝ) (k : ℕ) : ℝ :=
+@[expose] public noncomputable def reconstructCoeff (R : ℕ → ℝ) (k : ℕ) : ℝ :=
   (R k ^ 2 - 1) / R (k + 1)
 
 /-- **Algorithm 4, the general reconstruction identity.** For any `R` with
 `R (k+1) ≠ 0` and `R k ≥ 0`, the reconstructed coefficient makes `R k` satisfy
 the stated recursion exactly — this holds for an arbitrary target profile
 `R`, not just the specific `N + k - 1` of Algorithm 3. -/
-theorem reconstructCoeff_satisfies_recursion (R : ℕ → ℝ) (k : ℕ)
+public theorem reconstructCoeff_satisfies_recursion (R : ℕ → ℝ) (k : ℕ)
     (hRk1 : R (k + 1) ≠ 0) (hRk_nonneg : 0 ≤ R k) :
     R k = Real.sqrt (1 + reconstructCoeff R k * R (k + 1)) := by
   unfold reconstructCoeff
@@ -36,7 +38,7 @@ theorem reconstructCoeff_satisfies_recursion (R : ℕ → ℝ) (k : ℕ)
 general reconstruction to the target profile `chainClosedForm N` gives back
 exactly the coefficients `N + k - 2` from `IdentityChain.lean` / Algorithm 3.
 -/
-theorem reconstructCoeff_chainClosedForm (N k : ℕ) (hN : 2 ≤ N) :
+public theorem reconstructCoeff_chainClosedForm (N k : ℕ) (hN : 2 ≤ N) :
     reconstructCoeff (chainClosedForm N) k = (N : ℝ) + (k : ℝ) - 2 := by
   have hNR : (2 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN
   have hk : (0 : ℝ) ≤ (k : ℝ) := Nat.cast_nonneg k

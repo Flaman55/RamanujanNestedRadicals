@@ -1,6 +1,8 @@
-import RamanujanNested.TargetRadical
-import RamanujanNested.NthRootChain
-import Mathlib
+module
+
+public import RamanujanNested.TargetRadical
+public import RamanujanNested.NthRootChain
+public import Mathlib
 
 /-!
 # TargetRadicalNthRoot.lean — the constant-coefficient exact-target radical, any root order n ≥ 2
@@ -45,22 +47,22 @@ namespace RamanujanNested
 
 /-- The constant coefficient whose n-th-root fixed point is exactly `t`,
 generalizing `targetCoeff` (`TargetRadical.lean`, the case `n=2`). -/
-noncomputable def targetCoeffN (n : ℕ) (t : ℝ) : ℝ := (t ^ n - 1) / t
+@[expose] public noncomputable def targetCoeffN (n : ℕ) (t : ℝ) : ℝ := (t ^ n - 1) / t
 
-theorem targetCoeffN_two_eq (t : ℝ) : targetCoeffN 2 t = targetCoeff t := by
+public theorem targetCoeffN_two_eq (t : ℝ) : targetCoeffN 2 t = targetCoeff t := by
   unfold targetCoeffN targetCoeff
   rcases eq_or_ne t 0 with h0 | h0
   · simp [h0]
   · field_simp
 
 /-- The defining fixed-point identity: `1 + a\cdot t = t^n`. -/
-theorem targetCoeffN_key {n : ℕ} {t : ℝ} (ht0 : t ≠ 0) :
+public theorem targetCoeffN_key {n : ℕ} {t : ℝ} (ht0 : t ≠ 0) :
     1 + targetCoeffN n t * t = t ^ n := by
   unfold targetCoeffN
   field_simp [ht0]
   ring
 
-theorem targetCoeffN_nonneg {n : ℕ} {t : ℝ} (ht : 1 ≤ t) : 0 ≤ targetCoeffN n t := by
+public theorem targetCoeffN_nonneg {n : ℕ} {t : ℝ} (ht : 1 ≤ t) : 0 ≤ targetCoeffN n t := by
   have htpos : 0 < t := lt_of_lt_of_le one_pos ht
   unfold targetCoeffN
   have h1 : (1:ℝ) ^ n ≤ t ^ n := pow_le_pow_left₀ (by norm_num) ht n
@@ -68,7 +70,7 @@ theorem targetCoeffN_nonneg {n : ℕ} {t : ℝ} (ht : 1 ≤ t) : 0 ≤ targetCoe
   exact div_nonneg (by linarith) htpos.le
 
 /-- **The rpow fixed-point property.** `(1+a\cdot t)^{1/n} = t` for `t \ge 1`. -/
-theorem targetCoeffN_rpow_fixed {n : ℕ} (hn : 2 ≤ n) {t : ℝ} (ht : 1 ≤ t) :
+public theorem targetCoeffN_rpow_fixed {n : ℕ} (hn : 2 ≤ n) {t : ℝ} (ht : 1 ≤ t) :
     (1 + targetCoeffN n t * t) ^ (1 / (n : ℝ)) = t := by
   have htpos : 0 < t := lt_of_lt_of_le one_pos ht
   have hn_ne : (n : ℝ) ≠ 0 := by
@@ -80,7 +82,7 @@ theorem targetCoeffN_rpow_fixed {n : ℕ} (hn : 2 ≤ n) {t : ℝ} (ht : 1 ≤ t
 /-- **Boundedness for the n-th-root target radical**, directly from
 `NthRootChain.lean`'s `rollUpN_bounded`: every truncation of the
 constant-`targetCoeffN n t`-radical lies in `[0,t]`. -/
-theorem targetRadicalN_bounded {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T)
+public theorem targetRadicalN_bounded {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T)
     (hTt : T ≤ t) (d : ℕ) :
     0 ≤ rollUpN n (fun _ => targetCoeffN n t) T d ∧
       rollUpN n (fun _ => targetCoeffN n t) T d ≤ t := by
@@ -94,7 +96,7 @@ theorem targetRadicalN_bounded {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤ 
 converting the `rpow`-defined recursion back to an ordinary polynomial
 equation — the one place this file bridges `rpow` and `pow`, same pattern as
 `NthRootChain.lean`. -/
-theorem targetRadicalN_step_pow {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T)
+public theorem targetRadicalN_step_pow {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T)
     (hTt : T ≤ t) (d : ℕ) :
     (rollUpN n (fun _ => targetCoeffN n t) T (d + 1)) ^ n =
       1 + targetCoeffN n t * rollUpN n (fun _ => targetCoeffN n t) T d := by
@@ -113,7 +115,7 @@ theorem targetRadicalN_step_pow {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤
 
 /-- **One contraction step, generalized.** The gap to the target `t` shrinks
 by the factor `\rho_n = a/t^{n-1} = 1-1/t^n` at every layer. -/
-theorem targetRadicalN_gap_step {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T)
+public theorem targetRadicalN_gap_step {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T)
     (hTt : T ≤ t) (d : ℕ) :
     t - rollUpN n (fun _ => targetCoeffN n t) T (d + 1) ≤
       (targetCoeffN n t / t ^ (n - 1)) * (t - rollUpN n (fun _ => targetCoeffN n t) T d) := by
@@ -148,7 +150,7 @@ theorem targetRadicalN_gap_step {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤
   nlinarith [hcomb]
 
 /-- **The geometric error bound**, by induction on `d`. -/
-theorem targetRadicalN_gap_geometric {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T)
+public theorem targetRadicalN_gap_geometric {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T)
     (hTt : T ≤ t) :
     ∀ d : ℕ, t - rollUpN n (fun _ => targetCoeffN n t) T d ≤
       (targetCoeffN n t / t ^ (n - 1)) ^ d * (t - T) := by
@@ -172,7 +174,7 @@ theorem targetRadicalN_gap_geometric {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 
 
 /-- The contraction ratio is strictly below `1`, unconditionally for `t > 0`:
 `t^n - 1 < t^n` always, so `\rho_n = (t^n-1)/t^n < 1`. -/
-theorem targetCoeffN_ratio_lt_one {n : ℕ} (hn : 2 ≤ n) {t : ℝ} (ht : 1 ≤ t) :
+public theorem targetCoeffN_ratio_lt_one {n : ℕ} (hn : 2 ≤ n) {t : ℝ} (ht : 1 ≤ t) :
     targetCoeffN n t / t ^ (n - 1) < 1 := by
   have htpos : 0 < t := lt_of_lt_of_le one_pos ht
   have hn1 : n - 1 + 1 = n := by omega
@@ -187,7 +189,7 @@ theorem targetCoeffN_ratio_lt_one {n : ℕ} (hn : 2 ≤ n) {t : ℝ} (ht : 1 ≤
 
 /-- **Convergence to exactly `t`, at any root order `n \ge 2`.** Generalizes
 `targetRadical_tendsto` (`TargetRadical.lean`, `n=2`). -/
-theorem targetRadicalN_tendsto {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T)
+public theorem targetRadicalN_tendsto {n : ℕ} (hn : 2 ≤ n) {t T : ℝ} (ht : 1 ≤ t) (hT0 : 0 ≤ T)
     (hTt : T ≤ t) :
     Filter.Tendsto (fun d => rollUpN n (fun _ => targetCoeffN n t) T d) Filter.atTop (nhds t) := by
   have htpos : 0 < t := lt_of_lt_of_le one_pos ht

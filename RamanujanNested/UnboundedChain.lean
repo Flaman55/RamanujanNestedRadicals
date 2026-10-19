@@ -1,7 +1,9 @@
-import RamanujanNested.Bounds
-import RamanujanNested.Monotone
-import RamanujanNested.IdentityChain
-import Mathlib
+module
+
+public import RamanujanNested.Bounds
+public import RamanujanNested.Monotone
+public import RamanujanNested.IdentityChain
+public import Mathlib
 
 /-!
 # UnboundedChain.lean — existence of a limit for the classical-type family
@@ -74,7 +76,7 @@ namespace RamanujanNested
 a function of a real (not just natural) target `N` — the same shape as the
 classical Ramanujan `a_k = k` up to the shift `N-2`, and hence just as
 unbounded as `k → ∞`. -/
-noncomputable def classicalCoeff (N : ℝ) (k : ℕ) : ℝ := N + (k : ℝ) - 2
+@[expose] public noncomputable def classicalCoeff (N : ℝ) (k : ℕ) : ℝ := N + (k : ℝ) - 2
 
 /-- **Moving-ceiling boundedness.** Unlike `Bounds.lean`, no fixed `A` bounds
 `classicalCoeff N`. Instead, the bound *moves*: at depth `d`, the truncation
@@ -82,7 +84,7 @@ is bounded by `N` itself, because peeling one layer trades `N` for `N+1` on
 a family with one fewer layer — proven by induction on `d`, quantifying `N`
 inside the induction (same pattern as `Bounds.lean`/`Monotone.lean`, for the
 same reason: the inductive step needs the claim for the *shifted* family). -/
-theorem rollUp_classicalCoeff_bounded :
+public theorem rollUp_classicalCoeff_bounded :
     ∀ (d : ℕ) (N T : ℝ), 1 ≤ N → 0 ≤ T → T ≤ N →
       0 ≤ rollUp (classicalCoeff N) T d ∧ rollUp (classicalCoeff N) T d ≤ N := by
   intro d
@@ -118,7 +120,7 @@ theorem rollUp_classicalCoeff_bounded :
       _ = N := Real.sqrt_sq (by linarith)
 
 /-- Specialized to the canonical seed `T = 1` (matching `truncRadical`). -/
-theorem classicalCoeff_bounded {N : ℝ} (hN : 1 ≤ N) (d : ℕ) :
+public theorem classicalCoeff_bounded {N : ℝ} (hN : 1 ≤ N) (d : ℕ) :
     0 ≤ truncRadical (classicalCoeff N) d ∧ truncRadical (classicalCoeff N) d ≤ N :=
   rollUp_classicalCoeff_bounded d N 1 hN (by norm_num) hN
 
@@ -129,7 +131,7 @@ restated as a `rollUp`-level equation (rather than the pointwise recursion on
 `chainClosedForm`), so it can be combined with `Monotone.lean`'s
 `rollUp_mono_seed` below. Proved directly by induction on `d`, mirroring
 `rollUp_classicalCoeff_bounded`'s shift trick but for an exact equality. -/
-theorem rollUp_classicalCoeff_hits_target :
+public theorem rollUp_classicalCoeff_hits_target :
     ∀ (d : ℕ) (N : ℝ), 1 ≤ N → rollUp (classicalCoeff N) (N + (d : ℝ)) d = N := by
   intro d
   induction d with
@@ -162,7 +164,7 @@ A.1's Table 3 ("since the map `T ↦ R_1^{(d)}(T)` is monotone increasing and
 guaranteed to approach `N` from below without ever exceeding it"), made
 precise: the five concrete tail policies in the table (`T=0`, `T=1`,
 `T=d/2`, `T=√d`, `T=d`) are all instances with `T(d) ≤ N+d` at `N=3`. -/
-theorem rollUp_classicalCoeff_le_of_tail_le {N T : ℝ} (hN : 2 ≤ N) (d : ℕ)
+public theorem rollUp_classicalCoeff_le_of_tail_le {N T : ℝ} (hN : 2 ≤ N) (d : ℕ)
     (hT : T ≤ N + (d : ℝ)) :
     rollUp (classicalCoeff N) T d ≤ N := by
   have hnonneg : ∀ k, 0 ≤ classicalCoeff N k := fun k => by
@@ -180,7 +182,7 @@ open Filter Topology
 `Bounds.lean`'s reach — converges to a finite limit `L`, and `L ≤ N`. This is
 new: Section 4.1 as stated does not cover this family at all. `L = N`
 exactly is proven separately, in `HerschfeldClosure.lean`. -/
-theorem classicalRadical_converges {N : ℝ} (hN : 2 ≤ N) :
+public theorem classicalRadical_converges {N : ℝ} (hN : 2 ≤ N) :
     ∃ L : ℝ, Tendsto (truncRadical (classicalCoeff N)) atTop (𝓝 L) ∧ L ≤ N := by
   have hnonneg : ∀ k, 0 ≤ classicalCoeff N k := fun k => by
     unfold classicalCoeff

@@ -1,7 +1,9 @@
-import RamanujanNested.Bounds
-import RamanujanNested.Monotone
-import Mathlib.NumberTheory.Bertrand
-import Mathlib.NumberTheory.PrimeCounting
+module
+
+public import RamanujanNested.Bounds
+public import RamanujanNested.Monotone
+public import Mathlib.NumberTheory.Bertrand
+public import Mathlib.NumberTheory.PrimeCounting
 
 /-!
 # PrimeChain.lean — existence of a limit for the prime-coefficient radical
@@ -55,7 +57,7 @@ open Filter Topology
 is at most `4^(n+1)`. Proved by induction using Bertrand's postulate: each
 prime is less than twice the previous one, and `2 * 4^(n+1) ≤ 4^(n+2)` with
 room to spare. -/
-theorem nth_prime_le_four_pow : ∀ n : ℕ, Nat.nth Nat.Prime n ≤ 4 ^ (n + 1) := by
+public theorem nth_prime_le_four_pow : ∀ n : ℕ, Nat.nth Nat.Prime n ≤ 4 ^ (n + 1) := by
   intro n
   induction n with
   | zero =>
@@ -88,10 +90,10 @@ to match the paper's convention (`primeCoeff 1 = 2`, `primeCoeff 2 = 3`,
 `primeCoeff 3 = 5`, ...). Index `0` is a dummy — `rollUp`/`truncRadical` never
 read `a 0` — set to `0` so it doesn't interfere with the global growth bound
 below. -/
-noncomputable def primeCoeff (k : ℕ) : ℝ :=
+@[expose] public noncomputable def primeCoeff (k : ℕ) : ℝ :=
   if k = 0 then 0 else (Nat.nth Nat.Prime (k - 1) : ℝ)
 
-theorem primeCoeff_nonneg (k : ℕ) : 0 ≤ primeCoeff k := by
+public theorem primeCoeff_nonneg (k : ℕ) : 0 ≤ primeCoeff k := by
   unfold primeCoeff
   split
   · norm_num
@@ -99,7 +101,7 @@ theorem primeCoeff_nonneg (k : ℕ) : 0 ≤ primeCoeff k := by
 
 /-- Global growth bound: `primeCoeff k ≤ 4^k` for every `k`, including the
 dummy `k = 0` case (`0 ≤ 4^0 = 1`). -/
-theorem primeCoeff_le_pow (k : ℕ) : primeCoeff k ≤ (4 : ℝ) ^ k := by
+public theorem primeCoeff_le_pow (k : ℕ) : primeCoeff k ≤ (4 : ℝ) ^ k := by
   unfold primeCoeff
   split
   · positivity
@@ -111,7 +113,7 @@ theorem primeCoeff_le_pow (k : ℕ) : primeCoeff k ≤ (4 : ℝ) ^ k := by
 
 /-- Elementary fact, proved from scratch (no dependency on a specific
 Mathlib `one_le_pow`-style lemma name): for `r > 1`, `r^n ≥ 1` for every `n`. -/
-theorem one_le_pow_of_one_lt {r : ℝ} (hr : 1 < r) : ∀ n : ℕ, (1 : ℝ) ≤ r ^ n := by
+public theorem one_le_pow_of_one_lt {r : ℝ} (hr : 1 < r) : ∀ n : ℕ, (1 : ℝ) ≤ r ^ n := by
   intro n
   induction n with
   | zero => simp
@@ -133,7 +135,7 @@ Quantifying `i` (and hence the coefficient function `b`) inside the induction
 is the same device `UnboundedChain.lean` uses for the linear family; here the
 moving ceiling is `A*r^i` rather than `N+1`, and — unlike that file — it
 closes to a genuine fixed constant `A*r^0 = A` at the top level `i = 0`. -/
-theorem rollUp_geomBounded {r A : ℝ} (hr : 1 < r) (hA : 0 ≤ A) (hAr : 1 ≤ A * (A - r ^ 2)) :
+public theorem rollUp_geomBounded {r A : ℝ} (hr : 1 < r) (hA : 0 ≤ A) (hAr : 1 ≤ A * (A - r ^ 2)) :
     ∀ (d i : ℕ) (b : ℕ → ℝ) (T : ℝ),
       (∀ k, 0 ≤ b k) → (∀ k, b k ≤ r ^ (i + k)) → 0 ≤ T → T ≤ A * r ^ i →
       0 ≤ rollUp b T d ∧ rollUp b T d ≤ A * r ^ i := by
@@ -190,7 +192,7 @@ theorem rollUp_geomBounded {r A : ℝ} (hr : 1 < r) (hA : 0 ≤ A) (hAr : 1 ≤ 
 /-- Concrete instantiation: `r = 4`, `A = 17` satisfies `rollUp_geomBounded`'s
 hypotheses (`1 ≤ 17*(17-16) = 17`), and `primeCoeff_le_pow` supplies exactly
 the growth bound `primeCoeff k ≤ 4^(0+k)` needed at the top level (`i = 0`). -/
-theorem primeCoeff_bounded (d : ℕ) :
+public theorem primeCoeff_bounded (d : ℕ) :
     0 ≤ truncRadical primeCoeff d ∧ truncRadical primeCoeff d ≤ 17 := by
   have hr : (1 : ℝ) < 4 := by norm_num
   have hA : (0 : ℝ) ≤ 17 := by norm_num
@@ -209,7 +211,7 @@ itself leaves as an open problem in v2 (see `RamanujanNested.lean`). Unlike
 establishes EXISTENCE of a finite limit, via a much cruder growth bound
 (`p_k ≤ 4^k`, itself following from Bertrand's postulate). The exact value is
 not pinned down here and is left open, matching the paper. -/
-theorem primeRadical_converges :
+public theorem primeRadical_converges :
     ∃ L : ℝ, Tendsto (truncRadical primeCoeff) atTop (𝓝 L) ∧ L ≤ 17 := by
   have hmono : Monotone (truncRadical primeCoeff) :=
     truncRadical_monotone primeCoeff primeCoeff_nonneg

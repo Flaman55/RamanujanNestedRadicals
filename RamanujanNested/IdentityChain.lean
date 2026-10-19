@@ -1,4 +1,6 @@
-import RamanujanNested.Defs
+module
+
+public import RamanujanNested.Defs
 
 /-!
 # IdentityChain.lean — Appendix A.1, Algorithm 3
@@ -19,10 +21,10 @@ R_k = N+k-1", made precise and machine-checked.
 namespace RamanujanNested
 
 /-- The closed form claimed by Algorithm 3. -/
-noncomputable def chainClosedForm (N k : ℕ) : ℝ := (N : ℝ) + (k : ℝ) - 1
+@[expose] public noncomputable def chainClosedForm (N k : ℕ) : ℝ := (N : ℝ) + (k : ℝ) - 1
 
 /-- The base case: `R_{d+1} = N + d`, matching Algorithm 3's initialization. -/
-theorem chain_base (N d : ℕ) : chainClosedForm N (d + 1) = (N : ℝ) + (d : ℝ) := by
+public theorem chain_base (N d : ℕ) : chainClosedForm N (d + 1) = (N : ℝ) + (d : ℝ) := by
   unfold chainClosedForm
   push_cast
   ring
@@ -32,7 +34,7 @@ the recursion `R_k = √(1 + (N+k-2)·R_{k+1})` for every `N ≥ 2` and every `k
 (the algebraic identity underneath, `(m-1)² = 1 + (m-2)·m` with `m = N+k`,
 holds unconditionally in `k`; only `N ≥ 2` is needed so that `N+k-1 ≥ 0` and the
 square root can be inverted). In particular (`k = 1`) this gives `R_1 = N`. -/
-theorem chain_satisfies_recursion (N k : ℕ) (hN : 2 ≤ N) :
+public theorem chain_satisfies_recursion (N k : ℕ) (hN : 2 ≤ N) :
     chainClosedForm N k =
       Real.sqrt (1 + ((N : ℝ) + (k : ℝ) - 2) * chainClosedForm N (k + 1)) := by
   have hNR : (2 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN
@@ -52,7 +54,7 @@ which is the numerical phenomenon documented in Table 1 (the "Rolling
 construction" column hitting the target `N` exactly at every depth). Holds for
 every `N`, not only `N ≥ 2` — unlike `chain_satisfies_recursion`, no square
 root needs inverting here. -/
-theorem chain_hits_target (N : ℕ) :
+public theorem chain_hits_target (N : ℕ) :
     chainClosedForm N 1 = (N : ℝ) := by
   unfold chainClosedForm
   push_cast

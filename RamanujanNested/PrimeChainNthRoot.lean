@@ -1,6 +1,8 @@
-import RamanujanNested.PrimeChain
-import RamanujanNested.NthRootChain
-import Mathlib
+module
+
+public import RamanujanNested.PrimeChain
+public import RamanujanNested.NthRootChain
+public import Mathlib
 
 /-!
 # PrimeChainNthRoot.lean — the prime-coefficient radical, at any root order n ≥ 2
@@ -24,7 +26,7 @@ namespace RamanujanNested
 
 /-- **Geometric moving-ceiling boundedness, any root order.** Same hypotheses
 as `rollUp_geomBounded`, generalized to `rollUpN`. -/
-theorem rollUpN_geomBounded (n : ℕ) (hn : 2 ≤ n) {r A : ℝ} (hr : 1 < r) (hA : 0 ≤ A)
+public theorem rollUpN_geomBounded (n : ℕ) (hn : 2 ≤ n) {r A : ℝ} (hr : 1 < r) (hA : 0 ≤ A)
     (hAr : 1 ≤ A * (A - r ^ 2)) :
     ∀ (d i : ℕ) (b : ℕ → ℝ) (T : ℝ),
       (∀ k, 0 ≤ b k) → (∀ k, b k ≤ r ^ (i + k)) → 0 ≤ T → T ≤ A * r ^ i →
@@ -103,7 +105,7 @@ theorem rollUpN_geomBounded (n : ℕ) (hn : 2 ≤ n) {r A : ℝ} (hr : 1 < r) (h
 
 /-- Concrete instantiation, any root order: `r = 4`, `A = 17` (unchanged from
 `PrimeChain.lean`, since the hypotheses transfer without modification). -/
-theorem primeCoeffN_bounded (n : ℕ) (hn : 2 ≤ n) (d : ℕ) :
+public theorem primeCoeffN_bounded (n : ℕ) (hn : 2 ≤ n) (d : ℕ) :
     0 ≤ rollUpN n primeCoeff 1 d ∧ rollUpN n primeCoeff 1 d ≤ 17 := by
   have hr : (1 : ℝ) < 4 := by norm_num
   have hA : (0 : ℝ) ≤ 17 := by norm_num
@@ -120,7 +122,7 @@ open Filter Topology
 /-- **Existence of a limit for `a_k = p_k`, at any root order `n ≥ 2`.**
 Generalizes `primeRadical_converges` (`PrimeChain.lean`, root order `2`) to
 every root order at once. -/
-theorem primeRadicalN_converges (n : ℕ) (hn : 2 ≤ n) :
+public theorem primeRadicalN_converges (n : ℕ) (hn : 2 ≤ n) :
     ∃ L : ℝ, Tendsto (fun d => rollUpN n primeCoeff 1 d) atTop (𝓝 L) ∧ L ≤ 17 := by
   have hmono : Monotone (fun d => rollUpN n primeCoeff 1 d) :=
     truncRadicalN_monotone n primeCoeff primeCoeff_nonneg

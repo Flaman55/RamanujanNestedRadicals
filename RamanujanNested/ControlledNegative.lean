@@ -1,4 +1,6 @@
-import RamanujanNested.Bounds
+module
+
+public import RamanujanNested.Bounds
 
 /-!
 # ControlledNegative.lean — Lemma 1 (controlled negative coefficients)
@@ -25,7 +27,7 @@ down is bounded by `r* = rStar A` (which holds unconditionally by
 exactly the paper's claim: "the condition ensures that the radicand
 `1 + a_k R_{k+1}` remains nonnegative for all admissible values of `R_{k+1}`
 bounded by `r*`." -/
-theorem rollUp_radicand_nonneg {A Aneg T : ℝ} (hA : 0 ≤ A) (hAneg : 0 ≤ Aneg)
+public theorem rollUp_radicand_nonneg {A Aneg T : ℝ} (hA : 0 ≤ A) (hAneg : 0 ≤ Aneg)
     (hbound : Aneg ≤ 1 / rStar A) (hT0 : 0 ≤ T) (hTA : T ≤ rStar A) :
     ∀ (d : ℕ) (a : ℕ → ℝ), (∀ k, -Aneg ≤ a k) → (∀ k, a k ≤ A) →
       0 ≤ 1 + a 1 * rollUp (fun k => a (k + 1)) T d := by
@@ -50,7 +52,7 @@ theorem rollUp_radicand_nonneg {A Aneg T : ℝ} (hA : 0 ≤ A) (hAneg : 0 ≤ An
 truncation is simultaneously (a) in `[0, r*]` and (b) built from a genuinely
 nonnegative radicand at every step, i.e. the recursion is well-defined in ℝ
 throughout, not merely bounded as a side effect of `Real.sqrt`'s totality. -/
-theorem rollUp_controlled_negative {A Aneg T : ℝ} (hA : 0 ≤ A) (hAneg : 0 ≤ Aneg)
+public theorem rollUp_controlled_negative {A Aneg T : ℝ} (hA : 0 ≤ A) (hAneg : 0 ≤ Aneg)
     (hbound : Aneg ≤ 1 / rStar A) (hT0 : 0 ≤ T) (hTA : T ≤ rStar A) :
     ∀ (d : ℕ) (a : ℕ → ℝ), (∀ k, -Aneg ≤ a k) → (∀ k, a k ≤ A) →
       (0 ≤ rollUp a T d ∧ rollUp a T d ≤ rStar A) ∧

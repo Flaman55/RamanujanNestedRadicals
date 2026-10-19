@@ -1,26 +1,28 @@
-import RamanujanNested.Defs
-import RamanujanNested.Bounds
-import RamanujanNested.Monotone
-import RamanujanNested.Convergence
-import RamanujanNested.ControlledNegative
-import RamanujanNested.IdentityChain
-import RamanujanNested.Reconstruction
-import RamanujanNested.Oscillatory
-import RamanujanNested.TargetRadical
-import RamanujanNested.UnboundedChain
-import RamanujanNested.HerschfeldClosure
-import RamanujanNested.PrimeChain
-import RamanujanNested.LinearChain
-import RamanujanNested.LinearChainGeneral
-import RamanujanNested.LinearChainTight
-import RamanujanNested.NthRootChain
-import RamanujanNested.LinearChainNthRoot
-import RamanujanNested.LinearChainGeneralNthRoot
-import RamanujanNested.LinearChainTightNthRoot
-import RamanujanNested.PrimeChainNthRoot
-import RamanujanNested.OscillatoryNthRoot
-import RamanujanNested.TargetRadicalNthRoot
-import RamanujanNested.IdentityChainNthRoot
+module
+
+public import RamanujanNested.Defs
+public import RamanujanNested.Bounds
+public import RamanujanNested.Monotone
+public import RamanujanNested.Convergence
+public import RamanujanNested.ControlledNegative
+public import RamanujanNested.IdentityChain
+public import RamanujanNested.Reconstruction
+public import RamanujanNested.Oscillatory
+public import RamanujanNested.TargetRadical
+public import RamanujanNested.UnboundedChain
+public import RamanujanNested.HerschfeldClosure
+public import RamanujanNested.PrimeChain
+public import RamanujanNested.LinearChain
+public import RamanujanNested.LinearChainGeneral
+public import RamanujanNested.LinearChainTight
+public import RamanujanNested.NthRootChain
+public import RamanujanNested.LinearChainNthRoot
+public import RamanujanNested.LinearChainGeneralNthRoot
+public import RamanujanNested.LinearChainTightNthRoot
+public import RamanujanNested.PrimeChainNthRoot
+public import RamanujanNested.OscillatoryNthRoot
+public import RamanujanNested.TargetRadicalNthRoot
+public import RamanujanNested.IdentityChainNthRoot
 
 /-!
 # RamanujanNested — Lean 4 formalization

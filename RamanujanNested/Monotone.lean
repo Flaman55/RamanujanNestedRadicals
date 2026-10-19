@@ -1,4 +1,6 @@
-import RamanujanNested.Defs
+module
+
+public import RamanujanNested.Defs
 
 /-!
 # Monotone.lean — Section 4.1, monotonicity of the truncated sequence
@@ -17,7 +19,7 @@ namespace RamanujanNested
 nonnegative. Stated with `a` quantified inside the induction (same reason as
 in `Bounds.lean`: the inductive step needs the claim for the *shifted*
 coefficient sequence, not just the original `a`). -/
-theorem rollUp_seed_one_step_mono :
+public theorem rollUp_seed_one_step_mono :
     ∀ (N : ℕ) (a : ℕ → ℝ), (∀ k, 0 ≤ a k) → rollUp a 1 N ≤ rollUp a 1 (N + 1) := by
   intro N
   induction N with
@@ -44,7 +46,7 @@ theorem rollUp_seed_one_step_mono :
 
 /-- `truncRadical a` is monotone in the truncation depth, for nonnegative
 coefficients — the monotonicity half of Section 4.1's convergence argument. -/
-theorem truncRadical_monotone (a : ℕ → ℝ) (ha : ∀ k, 0 ≤ a k) :
+public theorem truncRadical_monotone (a : ℕ → ℝ) (ha : ∀ k, 0 ≤ a k) :
     Monotone (truncRadical a) := by
   apply monotone_nat_of_le_succ
   intro N
@@ -60,7 +62,7 @@ specializes it to the classical family to recover the table's actual claim.
 Stated with `a` quantified inside the induction, same reason as
 `rollUp_seed_one_step_mono`: the inductive step needs the claim for the
 *shifted* coefficient sequence, not just the original `a`. -/
-theorem rollUp_mono_seed :
+public theorem rollUp_mono_seed :
     ∀ (d : ℕ) (a : ℕ → ℝ), (∀ k, 0 ≤ a k) → ∀ (T1 T2 : ℝ), T1 ≤ T2 →
       rollUp a T1 d ≤ rollUp a T2 d := by
   intro d
