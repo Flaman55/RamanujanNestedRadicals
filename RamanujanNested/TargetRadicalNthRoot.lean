@@ -52,13 +52,13 @@ theorem targetCoeffN_two_eq (t : ℝ) : targetCoeffN 2 t = targetCoeff t := by
   rcases eq_or_ne t 0 with h0 | h0
   · simp [h0]
   · field_simp
-    ring
 
 /-- The defining fixed-point identity: `1 + a\cdot t = t^n`. -/
 theorem targetCoeffN_key {n : ℕ} {t : ℝ} (ht0 : t ≠ 0) :
     1 + targetCoeffN n t * t = t ^ n := by
   unfold targetCoeffN
   field_simp [ht0]
+  ring
 
 theorem targetCoeffN_nonneg {n : ℕ} {t : ℝ} (ht : 1 ≤ t) : 0 ≤ targetCoeffN n t := by
   have htpos : 0 < t := lt_of_lt_of_le one_pos ht

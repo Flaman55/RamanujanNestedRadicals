@@ -31,7 +31,7 @@ theorem rollUpN_geomBounded (n : ℕ) (hn : 2 ≤ n) {r A : ℝ} (hr : 1 < r) (h
       0 ≤ rollUpN n b T d ∧ rollUpN n b T d ≤ A * r ^ i := by
   have hA_gt : r ^ 2 < A := by
     by_contra h
-    push_neg at h
+    replace h := not_lt.mp h
     have : A * (A - r ^ 2) ≤ 0 := mul_nonpos_of_nonneg_of_nonpos hA (by linarith)
     linarith [hAr]
   have hr2_gt1 : (1:ℝ) < r ^ 2 := by nlinarith [hr, sq_nonneg (r - 1)]

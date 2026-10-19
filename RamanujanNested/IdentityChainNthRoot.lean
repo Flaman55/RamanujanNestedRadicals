@@ -471,7 +471,7 @@ theorem deficitS_growth_even {n : ℕ} (hn : 2 ≤ n) (hne : Even n) {N : ℝ} (
     linarith [h4, hNn2]
   have hanpos : 0 < altSum n N := by
     by_contra hcon
-    push_neg at hcon
+    replace hcon := not_lt.mp hcon
     have hle0 : altSum n N * (N + 1) ≤ 0 := mul_nonpos_of_nonpos_of_nonneg hcon hNp1pos.le
     linarith [haltval, hNnpos, hle0]
   have hstep1 : altSum n N * (N + 1) ≤
@@ -514,7 +514,6 @@ private theorem quadS_step {n : ℕ} (hn : 2 ≤ n) (hne : Even n) {N₀ M : ℝ
   have eq1 : deficitS n N₀ * (M * (M - 1)) / (N₀ * (N₀ - 1)) * ((M + 1) / (M - 1)) =
       deficitS n N₀ * ((M + 1) * M) / (N₀ * (N₀ - 1)) := by
     field_simp
-    ring
   have eq2 : deficitS n M * ((M + 1) / (M - 1)) = deficitS n M * (M + 1) / (M - 1) := by ring
   rw [eq1, eq2] at step
   exact le_trans step hgrow
@@ -708,7 +707,7 @@ theorem deficitS_growth_odd {n : ℕ} (hn : 2 ≤ n) (hodd : Odd n) {N : ℝ} (h
   have hNnpos : (0 : ℝ) < N ^ n + 1 := by positivity
   have hanpos : 0 < altSum n N := by
     by_contra hcon
-    push_neg at hcon
+    replace hcon := not_lt.mp hcon
     have hle0 : altSum n N * (N + 1) ≤ 0 := mul_nonpos_of_nonpos_of_nonneg hcon hNp1pos.le
     linarith [haltval, hNnpos, hle0]
   have hstep2 : (N ^ n - 1) * deficitS n N ≤
@@ -819,7 +818,6 @@ private theorem quadS_step_odd {n : ℕ} (hn : 2 ≤ n) (hodd : Odd n) {N₀ M P
         (deficitS n M * (M + 1) * shrinkFactor n M) / (M - 1) := by
       have hMne : (M - 1 : ℝ) ≠ 0 := ne_of_gt hMpos
       field_simp
-      ring
     rw [heq, div_le_iff₀ hMpos]
     exact hgrow
   have step : deficitS n N₀ * (M * (M - 1)) / (N₀ * (N₀ - 1)) * P *
@@ -832,7 +830,6 @@ private theorem quadS_step_odd {n : ℕ} (hn : 2 ≤ n) (hodd : Odd n) {N₀ M P
     have hMne : (M - 1 : ℝ) ≠ 0 := ne_of_gt hMpos
     have hN0ne : (N₀ * (N₀ - 1) : ℝ) ≠ 0 := ne_of_gt hN0pos
     field_simp
-    ring
   rw [eq1] at step
   exact le_trans step hgrow'
 

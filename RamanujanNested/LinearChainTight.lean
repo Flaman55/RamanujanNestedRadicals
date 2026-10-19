@@ -66,7 +66,7 @@ holds iff `m² ≤ 1`, i.e. `m ≤ 1` together with `m ≥ -1`, but for `m ≤ 0
 bound `3m ≤ 0 ≤ √(5m²+4)` is immediate anyway) against `√(5m²+4)`. -/
 theorem tightShift_nonneg {m : ℝ} (hm1 : m ≤ 1) : 0 ≤ tightShift m := by
   unfold tightShift
-  rcases le_or_lt m 0 with hm0 | hm0
+  rcases le_or_gt m 0 with hm0 | hm0
   · have hr_nonneg : (0:ℝ) ≤ Real.sqrt (5 * m ^ 2 + 4) := Real.sqrt_nonneg _
     linarith
   · have h3m_nonneg : (0:ℝ) ≤ 3 * m := by linarith

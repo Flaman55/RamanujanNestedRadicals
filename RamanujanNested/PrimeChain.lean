@@ -63,16 +63,16 @@ theorem nth_prime_le_four_pow : ∀ n : ℕ, Nat.nth Nat.Prime n ≤ 4 ^ (n + 1)
     norm_num
   | succ n ih =>
     have hprime_n : Nat.Prime (Nat.nth Nat.Prime n) :=
-      Nat.nth_mem_of_infinite Nat.infinite_setOf_prime n
+      Nat.nth_mem_of_infinite Nat.infinite_setOfPred_prime n
     have hpos : Nat.nth Nat.Prime n ≠ 0 := hprime_n.pos.ne'
     obtain ⟨q, hq_prime, hq_lt, hq_le⟩ :=
       Nat.exists_prime_lt_and_le_two_mul (Nat.nth Nat.Prime n) hpos
     have hle1 : Nat.nth Nat.Prime n + 1 ≤ q := by omega
     have hcount : Nat.count Nat.Prime (Nat.nth Nat.Prime n + 1) ≤ Nat.count Nat.Prime q :=
       Nat.count_monotone Nat.Prime hle1
-    rw [Nat.count_nth_succ_of_infinite Nat.infinite_setOf_prime n] at hcount
+    rw [Nat.count_nth_succ_of_infinite Nat.infinite_setOfPred_prime n] at hcount
     have hnth_le : Nat.nth Nat.Prime (n + 1) ≤ Nat.nth Nat.Prime (Nat.count Nat.Prime q) :=
-      Nat.nth_monotone Nat.infinite_setOf_prime hcount
+      Nat.nth_monotone Nat.infinite_setOfPred_prime hcount
     rw [Nat.nth_count hq_prime] at hnth_le
     calc Nat.nth Nat.Prime (n + 1) ≤ q := hnth_le
       _ ≤ 2 * Nat.nth Nat.Prime n := hq_le

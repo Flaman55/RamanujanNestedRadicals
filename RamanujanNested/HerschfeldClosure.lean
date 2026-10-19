@@ -166,7 +166,6 @@ private theorem quad_step {N₀ M : ℝ} (hN₀ : 2 ≤ N₀) (hM : 2 ≤ M)
   have eq1 : deficit N₀ * (M * (M - 1)) / (N₀ * (N₀ - 1)) * ((M + 1) / (M - 1)) =
       deficit N₀ * ((M + 1) * M) / (N₀ * (N₀ - 1)) := by
     field_simp
-    ring
   have eq2 : deficit M * ((M + 1) / (M - 1)) = deficit M * (M + 1) / (M - 1) := by ring
   rw [eq1, eq2] at step
   exact le_trans step hgrow
