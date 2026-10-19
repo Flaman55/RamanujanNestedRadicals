@@ -1,11 +1,12 @@
-# RamanujanNested
+# RamanujanNestedRadicals
 
 A Lean 4 / Mathlib formalization accompanying the paper **"Nested Radicals of
 Ramanujan's Type with Arbitrary Coefficient Sequences"** (A. Flamandzki),
 plus original extensions of the paper's own general framework to a case the
 paper itself does not establish.
 
-Builds cleanly against `lake build`, zero `sorry`.
+Builds cleanly against `lake build` on Lean/Mathlib `v4.35.0-rc2`, zero `sorry`.
+License: Apache-2.0.
 
 The paper itself has been revised to a second version incorporating what this
 formalization effort found (see "Errors this formalization caught" below).
@@ -283,6 +284,8 @@ conclusion.
 ## Repository structure
 
 ```
+Challenge.lean, Solution.lean     -- Palomar statement file and proofs
+comparator.json, formalization.yaml
 RamanujanNested.lean              -- root import + full status summary
 RamanujanNested/
   Defs.lean                       -- the recursion, truncRadical, r*
@@ -310,6 +313,16 @@ RamanujanNested/
   IdentityChainNthRoot.lean                                  -- classical unbounded family, any n >= 2
 ```
 
+## Palomar submission files
+
+`Challenge.lean` states eight results over definitions given in the file itself (it imports only
+Mathlib): convergence for bounded coefficients, convergence of `a_k = N+k-2` to exactly `N`, the
+identity chain for every root order `n >= 2`, convergence to exactly `N` for every `n >= 2`
+(even and odd), and the constant-coefficient construction converging to a prescribed target
+with an explicit geometric rate. `Solution.lean` defines the same objects and proves each
+statement from the development in `RamanujanNested/`. `comparator.json` configures the
+Comparator check and `formalization.yaml` describes sources, provenance and fidelity.
+
 ## Building
 
 ```sh
@@ -317,4 +330,14 @@ lake exe cache get
 lake build
 ```
 
-Pinned toolchain: `leanprover/lean4:v4.14.0`; Mathlib at `v4.14.0`.
+Pinned toolchain: `leanprover/lean4:v4.35.0-rc2`; Mathlib at `v4.35.0-rc2`.
+
+## Production and review
+
+The paper text and the original Lean files were written by an AI agent (Claude) under the
+author's direction; the port to Lean/Mathlib `v4.35.0-rc2`, the conversion to Lean's module
+system, `Challenge.lean`, `Solution.lean` and `formalization.yaml` were written by an AI agent
+(Claude, in Claude Cowork) in October 2026, with every build run by the author. The mathematics
+is the author's; Lean's kernel decides correctness. The author has not read the Lean source
+line by line, and independent verification would be valuable. Details are in
+`formalization.yaml`.

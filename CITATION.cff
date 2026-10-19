@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you use this formalization, please cite the accompanying paper and this repository."
+title: "RamanujanNestedRadicals: a Lean 4 / Mathlib formalization of convergence and exact values of Ramanujan-type nested radicals"
+abstract: >-
+  A machine-checked (zero-`sorry`) Lean 4 development of results from "Nested Radicals of
+  Ramanujan's Type with Arbitrary Coefficient Sequences": convergence for bounded
+  coefficient sequences, exact convergence of the classical family a_k = N + k - 2 to N,
+  the closed-form identity chain and exact limit N for every root order n >= 2 (both
+  parities), and the constant-coefficient construction converging to a prescribed target
+  with an explicit geometric rate.
+type: software
+authors:
+  - family-names: Flamandzki
+    given-names: Artur
+    email: flamandzki.artur@gmail.com
+version: 0.1.0
+license: Apache-2.0
+repository-code: "https://github.com/Flaman55/RamanujanNestedRadicals"
+keywords:
+  - Lean 4
+  - Mathlib
+  - nested radicals
+  - Ramanujan
+  - convergence
+  - formal verification
+references:
+  - type: article
+    title: "Nested Radicals of Ramanujan's Type with Arbitrary Coefficient Sequences"
+    authors:
+      - family-names: Flamandzki
+        given-names: Artur
+    doi: "10.5281/zenodo.18071173"
