@@ -1,6 +1,6 @@
 name = "RamanujanNested"
 version = "0.1.0"
-defaultTargets = ["RamanujanNested"]
+defaultTargets = ["RamanujanNested", "Challenge", "Solution"]
 
 [[require]]
 name = "mathlib"
@@ -9,3 +9,11 @@ rev = "v4.35.0-rc2"
 
 [[lean_lib]]
 name = "RamanujanNested"
+
+[[lean_lib]]
+name = "Challenge"
+roots = ["Challenge"]
+
+[[lean_lib]]
+name = "Solution"
+roots = ["Solution"]
