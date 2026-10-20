@@ -40,6 +40,13 @@ alternating polynomial `x^(n-1) - x^(n-2) + ⋯ ± 1`).
    coefficient `(tⁿ - 1)/t` makes the `n`-th-root radical converge to an arbitrary prescribed
    `t ≥ 1`, from any seed `0 ≤ T ≤ t`, with an explicit geometric rate.
 
+6. `Submission.rollUpN_profile_gap` and `Submission.rollUpN_profile_tendsto` (arbitrary profile,
+   any root order `n ≥ 2`): if `R k ≥ 1` for `k ≥ 1` and the coefficients are the ones making
+   `R` satisfy the recursion exactly, `R_kⁿ = 1 + a_k · R_{k+1}`, then the depth-`d` truncation
+   with seed `1` is within `R₁ · ∏_{j<d} (1 - 1/R_j)` of `R₁` (from below), and it converges to
+   exactly `R₁` whenever `∑ 1/R_k` diverges. The constant profile `R_k = t` and the profile
+   `R_k = N + k - 1` (for `n = 2`, the classical family) are special cases.
+
 No definition is left unspecified: all objects are defined here, and the Solution file defines
 them verbatim and proves every theorem.
 -/
@@ -165,4 +172,25 @@ public theorem Submission.targetRadicalN_tendsto {n : ℕ} (hn : 2 ≤ n) {t T :
     (hT0 : 0 ≤ T) (hTt : T ≤ t) :
     Filter.Tendsto (fun d => Submission.rollUpN n (fun _ => Submission.targetCoeffN n t) T d)
       Filter.atTop (nhds t) := by
+  sorry
+
+/-- **Explicit gap bound for a profile.** Let `n ≥ 2` and let `R` satisfy `R k ≥ 1` for `k ≥ 1`
+and `R_kⁿ = 1 + a_k · R_{k+1}` for `k ≥ 1`. Then the depth-`d` truncation with seed `1` lies below
+`R₁`, and `R₁ - rollUpN n a 1 d ≤ R₁ · ∏_{j<d} (1 - 1/R_{j+1})`. -/
+public theorem Submission.rollUpN_profile_gap {n : ℕ} (hn : 2 ≤ n) (d : ℕ) (a R : ℕ → ℝ)
+    (hR : ∀ k, 1 ≤ R (k + 1))
+    (ha : ∀ k, R (k + 1) ^ n = 1 + a (k + 1) * R (k + 2)) :
+    0 ≤ R 1 - Submission.rollUpN n a 1 d ∧
+      R 1 - Submission.rollUpN n a 1 d ≤
+        R 1 * ∏ j ∈ Finset.range d, (1 - 1 / R (j + 1)) := by
+  sorry
+
+/-- **Exact value for a profile with divergent `∑ 1/R_k`.** Under the hypotheses of
+`Submission.rollUpN_profile_gap`, if `∑ 1/R_k` diverges then the truncations converge to
+exactly `R₁`. -/
+public theorem Submission.rollUpN_profile_tendsto {n : ℕ} (hn : 2 ≤ n) (a R : ℕ → ℝ)
+    (hR : ∀ k, 1 ≤ R (k + 1))
+    (ha : ∀ k, R (k + 1) ^ n = 1 + a (k + 1) * R (k + 2))
+    (hdiv : ¬ Summable (fun k => 1 / R (k + 1))) :
+    Filter.Tendsto (fun d => Submission.rollUpN n a 1 d) Filter.atTop (nhds (R 1)) := by
   sorry

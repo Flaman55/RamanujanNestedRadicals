@@ -12,7 +12,8 @@ the statements follow from `RamanujanNested.truncRadical_converges`,
 `RamanujanNested.limitVal_tendsto` with `RamanujanNested.limitVal_eq_self`,
 `RamanujanNested.altSum_identity`, `RamanujanNested.chainS_satisfies_recursion`,
 `RamanujanNested.limitValNS_tendsto` with `RamanujanNested.limitValNS_eq_self_even` and
-`RamanujanNested.limitValNS_eq_self_odd`, and the theorems of `TargetRadicalNthRoot.lean`.
+`RamanujanNested.limitValNS_eq_self_odd`, the theorems of `TargetRadicalNthRoot.lean`, and
+`RamanujanNested.rollUpN_profile_gap` / `RamanujanNested.rollUpN_profile_tendsto`.
 -/
 
 /-! ## Definitions (verbatim from `Challenge.lean`) -/
@@ -182,3 +183,21 @@ public theorem Submission.targetRadicalN_tendsto {n : ℕ} (hn : 2 ≤ n) {t T :
       Filter.atTop (nhds t) := by
   simp only [rollUpN_eq, targetCoeffN_eq]
   exact RamanujanNested.targetRadicalN_tendsto hn ht hT0 hTt
+
+public theorem Submission.rollUpN_profile_gap {n : ℕ} (hn : 2 ≤ n) (d : ℕ) (a R : ℕ → ℝ)
+    (hR : ∀ k, 1 ≤ R (k + 1))
+    (ha : ∀ k, R (k + 1) ^ n = 1 + a (k + 1) * R (k + 2)) :
+    0 ≤ R 1 - Submission.rollUpN n a 1 d ∧
+      R 1 - Submission.rollUpN n a 1 d ≤
+        R 1 * ∏ j ∈ Finset.range d, (1 - 1 / R (j + 1)) := by
+  rw [rollUpN_eq]
+  obtain ⟨_, h0, h1⟩ := RamanujanNested.rollUpN_profile_gap (by omega) d a R hR ha
+  exact ⟨h0, h1⟩
+
+public theorem Submission.rollUpN_profile_tendsto {n : ℕ} (hn : 2 ≤ n) (a R : ℕ → ℝ)
+    (hR : ∀ k, 1 ≤ R (k + 1))
+    (ha : ∀ k, R (k + 1) ^ n = 1 + a (k + 1) * R (k + 2))
+    (hdiv : ¬ Summable (fun k => 1 / R (k + 1))) :
+    Filter.Tendsto (fun d => Submission.rollUpN n a 1 d) Filter.atTop (nhds (R 1)) := by
+  simp only [rollUpN_eq]
+  exact RamanujanNested.rollUpN_profile_tendsto (by omega) a R hR ha hdiv

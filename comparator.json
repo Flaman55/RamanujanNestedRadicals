@@ -9,7 +9,9 @@
     "Submission.truncRadicalNS_tendsto",
     "Submission.targetCoeffN_rpow_fixed",
     "Submission.targetRadicalN_gap_geometric",
-    "Submission.targetRadicalN_tendsto"
+    "Submission.targetRadicalN_tendsto",
+    "Submission.rollUpN_profile_gap",
+    "Submission.rollUpN_profile_tendsto"
   ],
   "definition_names": [],
   "permitted_axioms": [
