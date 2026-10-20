@@ -78,6 +78,7 @@ sources:
     authors: ["Aaron Herschfeld"]
     id: "doi:10.1080/00029890.1935.11987745"
     type: "paper"
+    location: "The Amer. Math. Monthly 42 (1935), 419-429"
     author_endorsement: "n/a"
     relationship: "background"
     note: >
@@ -88,11 +89,16 @@ sources:
       proof of the square-root case (known) and of the general-n statement.
   - title: "On Generalized Ramanujan-Style Nested Radicals for All Integers"
     authors: ["Charles Kusniec"]
-    id: "https://doi.org/10.5281/zenodo.16459290"
+    id: "https://doi.org/10.5281/zenodo.18044559"
     type: "paper"
+    location: "Sections 5 and 7 (Radiciatory constructions), Section 6 (examples)"
     author_endorsement: "not-contacted"
     relationship: "independently-proves"
     note: >
+      Zenodo preprint, version v7 of 24 December 2025 (open access), the version read for this
+      work. Intended
+      audience: readers of elementary number theory and recreational and educational
+      mathematics interested in Ramanujan-type identities.
       Square roots only. With q = 1 his family is the coefficient family a_k = N + k - 2 of
       advertised result (1) (x playing the role of N), so that statement is known there. His
       truncations are closed with the exact tail sqrt(p_n^2) = p_n, so every truncation equals x
@@ -105,9 +111,12 @@ sources:
     authors: ["Narendranath Mitra"]
     id: "arXiv:2404.04051"
     type: "paper"
+    location: "Sections 1.1-1.4 (the n-th root theorem) and Section 2 (cube-root proof)"
     author_endorsement: "not-contacted"
     relationship: "background"
     note: >
+      arXiv preprint (math.GM), version v1, April 2024. Intended audience: readers of
+      Ramanujan's nested radicals and their generalizations.
       Higher-order roots with a different recursion: f(x)^n = (1 + C(n,1) x + ... + C(n,n-2)
       x^(n-2)) + x^(n-1) f(x + n - 1), i.e. the radicand is a row of Pascal's triangle with the
       argument shifted by n - 1, and f(x) = x + 1. It is not of the form 1 + a_k R_{k+1} used
@@ -120,14 +129,19 @@ sources:
     authors: ["Geoffrey B. Campbell", "Aleksander Zujev"]
     id: "arXiv:1511.06865"
     type: "paper"
+    location: "Sections 2 and 3"
     author_endorsement: "not-contacted"
     relationship: "background"
     note: >
+      arXiv preprint (math.NT), version v1, November 2015. Intended audience: readers of
+      Ramanujan's radical identities and units in number fields.
       Finite algebraic radical identities and constructions of such identities; no infinite
       nested radical and no convergence statement. Context only.
   - title: "Notebooks of Srinivasa Ramanujan (Berndt, Ramanujan's Notebooks, Part II, p. 108, Entry 4)"
     authors: ["Srinivasa Ramanujan", "Bruce C. Berndt (editor)"]
     type: "book"
+    id: "Springer, New York, 1989 (Part II)"
+    location: "Part II, p. 108, Entry 4"
     author_endorsement: "n/a"
     relationship: "independently-proves"
     note: >
