@@ -23,6 +23,7 @@ public import RamanujanNested.PrimeChainNthRoot
 public import RamanujanNested.OscillatoryNthRoot
 public import RamanujanNested.TargetRadicalNthRoot
 public import RamanujanNested.IdentityChainNthRoot
+public import RamanujanNested.ProfileGap
 
 /-!
 # RamanujanNested — Lean 4 formalization
