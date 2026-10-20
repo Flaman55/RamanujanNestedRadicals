@@ -121,9 +121,8 @@ concerns, but concrete, checkable mistakes:
 - **`TargetRadical.lean`** — sidesteps the gap rather than closing it. A
   *constant* coefficient `a = t - 1/t` is shown to make the radical converge
   to the target `t` exactly, with an explicit geometric error bound, using
-  only the already-proven bounded-coefficient machinery. A different,
-  structurally simpler, faster-converging construction reaching the same
-  targets — not a fix for the classical radical itself.
+  only the already-proven bounded-coefficient machinery. A different construction
+  reaching the same targets, not a proof for the classical radical itself.
 - **`UnboundedChain.lean`** — extends Section 4.1 to the specific unbounded
   family `a_k = N+k-2` (the classical radical is `N=3`; `a_k=k` is `N=2`). A
   *moving-ceiling* induction (the bound at depth `d` is `N` itself, not a
@@ -142,10 +141,9 @@ concerns, but concrete, checkable mistakes:
   (`δ(N+1) ≥ δ(N)·(N+1)/(N-1)`, valid everywhere, no arbitrary cutoff), the
   deficit `δ(N) = N - L(N)` is shown to grow quadratically in the step count
   against a merely linear ceiling — forcing `δ ≡ 0`. **`limitVal_eq_self`
-  proves `L(N) = N` exactly** for this family: a genuine (if not previously
-  published, to the author's knowledge) convergence theorem in the spirit of
-  Herschfeld's classical result on infinite nested radicals, proved from
-  scratch rather than cited.
+  proves `L(N) = N` exactly** for this family: a convergence theorem proved here by a self-contained argument in the spirit of
+  Herschfeld's criterion for infinite nested radicals. For square roots the statement itself
+  is known (Ramanujan's Entry 4; Kusniec's family with q = 1).
 
 The sequence `a_k = k` is already covered directly, with no reindexing
 needed: it is exactly the `N = 2` instance of `a_k = N+k-2`, so
@@ -178,20 +176,19 @@ for `a_k = p_k` remains open, as it does in the paper itself.
   `HerschfeldClosure.lean`'s exact-value argument only balances at `m² = 1`,
   so slope `1` remains the only slope with a known closed-form limit;
   `linearRadical_converges` gives existence only for general `m ≥ 1`, the
-  same weaker guarantee as `PrimeChain.lean`. Motivation: not from the paper
-  itself, but from checking whether a literature family with a *different*
-  linear slope — Kusniec's difference-of-oblongs Radiciatory, coefficients
-  linear in depth with slope `q-1` — reduces to the paper's framework. It
-  does, for every `q ≥ 2`, with no new proof needed per value of `q`.
+  same weaker guarantee as `PrimeChain.lean`. Motivation: a linear coefficient sequence with a different slope than the
+  classical one. (Kusniec's difference-of-oblongs family has slope `q-1` but a
+  different radicand, `q² + a_k + a_k R_{k+1}`, so it is not an instance of this
+  recursion.)
 
 - **`LinearChainGeneral.lean`** — closes the remaining `0 < m < 1` range
-  (i.e. `1 < q < 2` for the oblong family), and in fact covers all `m > 0`
+  and in fact covers all `m > 0`
   in one argument, via a looser ceiling `C(N) = N+1` in place of `C(N) = N`.
   The key inequality reduces to `0 ≤ N+m+m²`, unconditionally true for
   `m > 0` — no case split needed. Bound is weaker (`L ≤ N+1` instead of
   `L ≤ N`); use `LinearChain.lean` instead whenever `m ≥ 1` for the tight
   bound. Existence of a limit is now known across the entire positive-slope
-  range, and Kusniec's oblong family is covered for every `q > 1`.
+  range.
 
 - **`LinearChainTight.lean`** — replaces `LinearChainGeneral.lean`'s loose
   `+1` slack with the exact minimal shift `s(m) = (√(5m²+4)-3m)/2`, the
@@ -206,10 +203,8 @@ for `a_k = p_k` remains open, as it does in the paper itself.
   `R_k = (1+a_k R_{k+1})^{1/n}` for any fixed root order `n ≥ 2`, and
   `truncRadicalN_converges` gives boundedness, monotonicity and convergence
   for ANY `n ≥ 2` together with ANY bounded sequence `0 ≤ a_k ≤ A` — the
-  `Convergence.lean` conclusion, now for every root order at once. Mitra
-  (arXiv:2404.04051) states a general-`n` identity schematically but proves
-  convergence only for `n = 3` (cube roots); this covers arbitrary `n` for
-  the bounded-coefficient case. The first file in this project to use
+  `Convergence.lean` conclusion, now for every root order at once. Mitra's higher-order construction (arXiv:2404.04051) uses a different
+  recursion (a binomial row in the radicand), so it is not the same family. The first file in this project to use
   `Real.rpow` instead of `Real.sqrt`.
 
 - **`LinearChainNthRoot.lean`** — combines `LinearChain.lean` with
@@ -316,13 +311,17 @@ RamanujanNested/
 
 ## Palomar submission files
 
-`Challenge.lean` states ten results over definitions given in the file itself (it imports only
-Mathlib): convergence for bounded coefficients, convergence of `a_k = N+k-2` to exactly `N`, the
-identity chain for every root order `n >= 2`, convergence to exactly `N` for every `n >= 2`
-(even and odd), and the constant-coefficient construction converging to a prescribed target
-with an explicit geometric rate, and an arbitrary-profile theorem with explicit rate (`RamanujanNested/ProfileGap.lean`: for `R_k >= 1` and coefficients making `R` satisfy the recursion exactly, the truncation error is at most `R_1 * prod (1 - 1/R_j)`, so the truncations converge to `R_1` whenever `sum 1/R_k` diverges). `Solution.lean` defines the same objects and proves each
-statement from the development in `RamanujanNested/`. `comparator.json` configures the
-Comparator check and `formalization.yaml` describes sources, provenance and fidelity.
+`Challenge.lean` states four results over definitions given in the file itself (it imports only
+Mathlib): (1) the square-root classical family `a_k = N+k-2` converges to exactly `N` (known; the base
+case); (2) the classical family for every root order `n >= 2`, even and odd, converges to exactly `N`,
+with the radicand `(-1)^n + a_k R_{k+1}` where the sign is the only place parity enters; (3) an
+arbitrary-profile theorem (`RamanujanNested/ProfileGap.lean`): for `R_k >= 1` and coefficients making `R`
+satisfy `R_k^n = 1 + a_k R_{k+1}` exactly, the truncation error is at most `R_1 * prod (1 - 1/R_j)`, so
+the truncations converge to `R_1` whenever `sum 1/R_k` diverges. `Solution.lean` defines the same
+objects and proves each statement from the development in `RamanujanNested/`. The other results of
+the development (bounded coefficients, identity chain, exact-target radical, linear and prime
+families) are not advertised. Elementary variants (constant-coefficient target radical, bounded coefficients, the closed-form identity chain) are not presented as results: they lie inside the covered space and appear only where the proofs need them or as special cases. Structurally, the recursion has the same shape for every root order `n` (radicand `±1 + a_k R_{k+1}`, one scalar coefficient, shift by one), unlike constructions built on a binomial row whose radicand changes with `n`. `comparator.json` configures the Comparator check and
+`formalization.yaml` describes sources, provenance and fidelity.
 
 ## Building
 

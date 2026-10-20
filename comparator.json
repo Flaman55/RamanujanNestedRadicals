@@ -2,14 +2,8 @@
   "challenge_module": "Challenge",
   "solution_module": "Solution",
   "theorem_names": [
-    "Submission.truncRadical_converges",
     "Submission.truncRadical_classical_tendsto",
-    "Submission.altSum_identity",
-    "Submission.chainS_satisfies_recursion",
     "Submission.truncRadicalNS_tendsto",
-    "Submission.targetCoeffN_rpow_fixed",
-    "Submission.targetRadicalN_gap_geometric",
-    "Submission.targetRadicalN_tendsto",
     "Submission.rollUpN_profile_gap",
     "Submission.rollUpN_profile_tendsto"
   ],
