@@ -311,15 +311,16 @@ RamanujanNested/
   OscillatoryNthRoot.lean                              -- oscillatory family, any n >= 2
   TargetRadicalNthRoot.lean                               -- exact-target radical, any n >= 2
   IdentityChainNthRoot.lean                                  -- classical unbounded family, any n >= 2
+  ProfileGap.lean                                              -- arbitrary profile: gap bound and exact value
 ```
 
 ## Palomar submission files
 
-`Challenge.lean` states eight results over definitions given in the file itself (it imports only
+`Challenge.lean` states ten results over definitions given in the file itself (it imports only
 Mathlib): convergence for bounded coefficients, convergence of `a_k = N+k-2` to exactly `N`, the
 identity chain for every root order `n >= 2`, convergence to exactly `N` for every `n >= 2`
 (even and odd), and the constant-coefficient construction converging to a prescribed target
-with an explicit geometric rate. `Solution.lean` defines the same objects and proves each
+with an explicit geometric rate, and an arbitrary-profile theorem with explicit rate (`RamanujanNested/ProfileGap.lean`: for `R_k >= 1` and coefficients making `R` satisfy the recursion exactly, the truncation error is at most `R_1 * prod (1 - 1/R_j)`, so the truncations converge to `R_1` whenever `sum 1/R_k` diverges). `Solution.lean` defines the same objects and proves each
 statement from the development in `RamanujanNested/`. `comparator.json` configures the
 Comparator check and `formalization.yaml` describes sources, provenance and fidelity.
 

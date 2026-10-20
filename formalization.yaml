@@ -13,7 +13,7 @@ project:
     replaced by the n-th root (`Submission.rollUpN`) and, for the classical unbounded family,
     by the signed recursion with radicand (-1)^n + a_k R_{k+1} (`Submission.rollUpNS`), whose
     coefficients are a_k = altSum n (N + k - 1) for the alternating polynomial altSum n x =
-    x^(n-1) - x^(n-2) + ... +- 1. Eight statements are submitted: (1) the truncations of any
+    x^(n-1) - x^(n-2) + ... +- 1. Ten statements are submitted: (1) the truncations of any
     bounded nonnegative coefficient sequence converge; (2) for real N >= 2 and a_k = N + k - 2
     the truncations converge to exactly N (for N = 3 this is Ramanujan's radical); (3) the
     identity altSum n x (x + 1) = x^n - (-1)^n and the exact closed form R_k = N + k - 1 for
@@ -21,7 +21,12 @@ project:
     exactly N for every n >= 2, both parities; and (5) for a prescribed target t >= 1 and every
     n >= 2, the constant coefficient (t^n - 1)/t has t as exact fixed point and the n-th-root
     radical converges to t from any seed 0 <= T <= t, with the explicit geometric bound
-    t - R_d <= (a / t^(n-1))^d (t - T). The development (`RamanujanNested/`, 23 modules)
+    t - R_d <= (a / t^(n-1))^d (t - T); and (6) an arbitrary-profile theorem: if R_k >= 1 and the
+    coefficients are the ones for which R satisfies the recursion exactly, R_k^n = 1 + a_k R_{k+1}, then the
+    depth-d truncation with seed 1 satisfies 0 <= R_1 - T_d <= R_1 prod_{j<d} (1 - 1/R_j), and it
+    converges to exactly R_1 whenever the sum of 1/R_k diverges (this contains the constant profile and
+    the classical family for n = 2 as special cases, with an explicit rate; it is not stated in the paper
+    and is new to this formalization). The development (`RamanujanNested/`, 23 modules)
     contains further results that are not advertised in `Challenge.lean`: boundedness and
     monotonicity, controlled negative coefficients, the inverse construction, an oscillatory
     family, existence of a limit for linear and prime coefficient families at every root order.
@@ -60,7 +65,11 @@ sources:
       formula); see `README.md`. Results for root order n >= 2 (the closed form for both
       parities, the exact limit N for both parities, the target construction) are stated in
       prose in the paper and proved in Lean; the odd-n exact limit needs an additional
-      product bound that is proved only in the Lean development.
+      product bound that is proved only in the Lean development. The arbitrary-profile
+      theorem (`ProfileGap.lean`, advertised results 9 and 10) is not in the paper: it is new
+      to this formalization, covers the exact-target construction and the classical square-root
+      family as special cases and adds an explicit convergence rate, and a later version of the
+      paper should state it.
       Intended audience: researchers working on nested radicals, Ramanujan-type identities and
       convergence of continued-radical expressions, and readers interested in formal
       verification of classical analysis. Literature check: the sources below were read and the
@@ -121,7 +130,7 @@ sources:
 
 status:
   scope: >
-    Eight declarations are submitted for Comparator review (see comparator.json). All are
+    Ten declarations are submitted for Comparator review (see comparator.json). All are
     stated in Challenge.lean over definitions that are given there in full and proved in
     Solution.lean, which imports the development in `RamanujanNested/`. Each definition of
     Solution.lean is shown equal to its counterpart in the `RamanujanNested` namespace and the
@@ -156,6 +165,16 @@ status:
     the constant coefficient a = (t^n - 1)/t the radicand at the fixed point t is 1 + a t =
     t^n, the iteration keeps values in [0, t] from any seed in [0, t], and the gap to t
     contracts by the ratio a / t^(n-1) < 1 per step (TargetRadicalNthRoot.lean).
+
+    `rollUpN_profile_gap` and `rollUpN_profile_tendsto` (ProfileGap.lean): with s the depth-(d+1)
+    truncation and u the depth-d truncation of the shifted problem, R_1^n - s^n = a_1 (R_2 - u)
+    and s >= 1 give R_1 - s <= (R_1 - 1)(R_2 - u)/R_2, by the geometric-sum factorization
+    x^n - y^n = (x - y) sum x^i y^(n-1-i). Induction on d telescopes this into R_1 - T_d <=
+    R_1 prod_{j<d} (1 - 1/R_j). Since 1 - x <= exp(-x), the product is at most
+    exp(-sum_{j<d} 1/R_j), which tends to 0 exactly when the sum of 1/R_k diverges; squeezing
+    gives convergence to R_1. No limit object, functional equation or deficit-growth argument is
+    used. Special cases: R_k = t (constant, seed 1) and R_k = N + k - 1 with n = 2, whose rate is
+    N (N - 1)/(N + d - 1).
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -203,6 +222,18 @@ status:
       comparator_config: "comparator.json"
       literature_dependencies: []
     - declaration: "Submission.targetRadicalN_tendsto"
+      file: "Challenge.lean / Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+      literature_dependencies: []
+    - declaration: "Submission.rollUpN_profile_gap"
+      file: "Challenge.lean / Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+      literature_dependencies: []
+    - declaration: "Submission.rollUpN_profile_tendsto"
       file: "Challenge.lean / Solution.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -265,7 +296,10 @@ fidelity:
     N and k, matching the closed form R_k = N + k - 1 of the paper, while the limit statements
     take real N >= 2. (f) The target statements assume t >= 1 and a seed 0 <= T <= t; other seeds are not covered. (g) The geometric
     bound is stated with ratio targetCoeffN n t / t^(n-1), which is < 1 (proved in the
-    development as `targetCoeffN_ratio_lt_one`). (h) The paper's numerical tables, the
+    development as `targetCoeffN_ratio_lt_one`). (h) The profile theorems are stated for the unsigned recursion with radicand 1 + a_k R_{k+1}
+    and seed 1, for every root order n >= 2 (the proof also works for n = 1); the signed family
+    with radicand (-1)^n + a_k R_{k+1} for odd n is not covered by them, and the profile
+    hypotheses are indexed from 1 (R k for k >= 1). (i) The paper's numerical tables, the
     algorithmic descriptions as running code, the discussion of other authors' constructions
     and the open questions (for example the exact value for prime coefficients) are not
     formalized. The paper prose was drafted by an agent (see `automation`); this note records
@@ -303,6 +337,11 @@ alignment:
       module: "RamanujanNested/IdentityChainNthRoot.lean"
       status: "proved"
       note: "Stated in prose in the paper; the odd case needs the product bound proved in Lean."
+    - source: "Not in the paper: arbitrary profile with explicit rate (new to this formalization)"
+      lean: "RamanujanNested.rollUpN_profile_gap / RamanujanNested.rollUpN_profile_tendsto"
+      module: "RamanujanNested/ProfileGap.lean"
+      status: "proved"
+      note: "Stated only in Lean; see fidelity (h)."
     - source: "Proposition on the constant-coefficient target radical, any root order"
       lean: "RamanujanNested.targetRadicalN_tendsto"
       module: "RamanujanNested/TargetRadicalNthRoot.lean"
