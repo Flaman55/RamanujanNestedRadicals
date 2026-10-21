@@ -23,7 +23,8 @@ project:
     truncation with seed 1 satisfies 0 <= R_1 - T_d <= R_1 prod_{j<d} (1 - 1/R_j), and it
     converges to exactly R_1 whenever the sum of 1/R_k diverges (it contains every constant
     profile and the classical family for every even n, with an explicit rate; it is not stated
-    in version 2 of the paper; version 3 states it). The development
+    in version 2 of the paper (10.5281/zenodo.18071173); version 3
+    (10.5281/zenodo.23546920) states it). The development
     (`RamanujanNested/`, 24 modules) contains further results that are not advertised in
     `Challenge.lean`: boundedness and monotonicity, controlled negative coefficients, the
     inverse construction, the closed-form identity chain for every n, the constant-coefficient
@@ -45,7 +46,7 @@ classification:
 sources:
   - title: "Nested Radicals of Ramanujan's Type with Arbitrary Coefficient Sequences"
     authors: ["Artur Flamandzki"]
-    id: "https://doi.org/10.5281/zenodo.18071173"
+    id: "https://doi.org/10.5281/zenodo.23546920"
     type: "paper"
     location: "Sections on convergence criteria, the classical unbounded family, exact value, higher-order roots and the constant-coefficient target construction"
     author_endorsement: "n/a"
@@ -67,7 +68,8 @@ sources:
       product bound that is proved only in the Lean development. The arbitrary-profile
       theorem (`ProfileGap.lean`, advertised result (3)) is not in version 2 of the paper: it
       covers the exact-target construction and the classical family for even n as special cases
-      and adds an explicit convergence rate; version 3 of the paper states it.
+      and adds an explicit convergence rate; version 3 of the paper (10.5281/zenodo.23546920)
+      states it.
       Intended audience: researchers working on nested radicals, Ramanujan-type identities and
       convergence of continued-radical expressions, and readers interested in formal
       verification of classical analysis. Literature check: the sources below were read and the

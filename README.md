@@ -8,11 +8,14 @@ paper itself does not establish.
 Builds cleanly against `lake build` on Lean/Mathlib `v4.35.0-rc2`, zero `sorry`.
 License: Apache-2.0.
 
-The paper itself has been revised to a second version incorporating what this
-formalization effort found (see "Errors this formalization caught" below).
-It is published on Zenodo: <https://zenodo.org/records/18071173>
-(DOI: 10.5281/zenodo.18071173), and that version's own new "Formal
-Verification" section points back to this repository.
+The paper was revised to a second version incorporating what this formalization
+effort found (see "Errors this formalization caught" below), DOI
+10.5281/zenodo.18071173. The current version 3 adds the arbitrary-profile theorem and
+a section on the use of AI tools: <https://zenodo.org/records/23546920>
+(DOI: 10.5281/zenodo.23546920). Its "Formal Verification" section points back to this
+repository. The formalization is registered in the Palomar registry as
+PALOMAR-2026-10-21-000015:
+<https://palomar-registry.org/entry?id=PALOMAR-2026-10-21-000015>.
 
 ## What this repository formally verifies
 

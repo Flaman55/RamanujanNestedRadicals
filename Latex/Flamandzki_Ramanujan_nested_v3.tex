@@ -441,6 +441,8 @@ The results of Section~\ref{sec:general-framework} — Lemma~\ref{lem:controlled
 \begin{center}
 \url{https://github.com/Flaman55/RamanujanNestedRadicals}
 \end{center}
+{\sloppy Four of these statements --- exact convergence of the classical family for square roots and for every root order $n \ge 2$, and the explicit error bound and exact convergence of Theorem~\ref{thm:profile} --- are registered in the Palomar registry of Lean-verified results as PALOMAR-2026-10-21-000015 (\url{https://palomar-registry.org/entry?id=PALOMAR-2026-10-21-000015}), whose review checks that the formal statements match the statements of this paper.\par}
+
 The sequence $a_k=k$ is already covered directly, with no reindexing needed: it is exactly the $N=2$ instance of $a_k=N+k-2$, so Theorem~\ref{thm:exact-convergence} applied at $N=2$ gives $a_k=k$ converging to $2$.
 
 The tail-independence discussion of Appendix~\ref{app:numerical-stability} (Table~\ref{tab:tail-independence}) has also been formally verified, closing a claim that had previously only been asserted in prose: the underlying fact is that the truncated radical is monotone not only in the truncation depth (Section~\ref{subsec:existence-convergence}) but also in the tail seed value itself, for nonnegative coefficients. Combined with the exact rolling identity of Algorithm~\ref{alg:identity}, restated at the level of the truncated radical rather than as a pointwise recursion on the closed form, this shows that any tail policy $T(d) \le N+d$ — in particular, all five policies tabulated — yields a truncated radical bounded above by $N$, exactly as claimed.
@@ -659,6 +661,48 @@ A direct computation shows that $R_k = N + k - 1$ for all $k$, and in particular
 \end{algorithm}
 
 This procedure makes explicit the inverse viewpoint adopted in the paper: instead of deriving values from coefficients, one may prescribe a structural profile and compute the coefficients that realize it. This perspective naturally accommodates nonstandard sequences, including arithmetic progressions, prime-based constructions, and oscillatory patterns, and Algorithm~\ref{alg:identity} is recovered as the special case $R_k = N+k-1$.
+
+\section*{Use of AI tools}
+The author acknowledges that large language models, used under the author's
+direction, contributed to this paper in the following ways.
+\begin{itemize}
+\item The author observed that Ramanujan's nested radical and its known variations
+  can be brought to a single general form driven by a coefficient sequence. ChatGPT
+  (OpenAI) assisted in constructing this general formulation
+  (Section~\ref{sec:general-framework}).
+\item The author proposed that such radicals can be designed in advance by
+  prescribing their values and solving for the continuation. ChatGPT assisted in
+  building the resulting backward (rolling) and inverse constructions
+  (Section~\ref{sec:motivation}, Algorithms~\ref{alg:rolling_root}
+  and~\ref{alg:design_gen}). The author chose prime, oscillatory and other
+  non-standard coefficient sequences as test cases for the general form
+  (Appendix~\ref{app:nonstandard}).
+\item The Lean~4 formalization was written by Claude (Anthropic) from the
+  \LaTeX{} text, under the author's direction. Formalizing the exact values
+  required ideas that were not in the first version of the paper, and the key
+  directions came from the author. When the AI's first estimate for the exact
+  value failed and it proposed to abandon the attempt, the author introduced the
+  moving ceiling, which bounds the truncations of the unbounded family
+  (Proposition~\ref{prop:moving-ceiling}). It continues his earlier structural
+  work: the support bound that shifts with each added generator for numerical
+  semigroups, and the advancing anchor of the structural window for Bertrand's
+  postulate. The AI then completed the deficit-growth argument
+  (Theorem~\ref{thm:exact-convergence}). The author also proposed the moving
+  ceiling for prime coefficients, the treatment of both parities of the root
+  order by a single construction, the uniform lower bound that closes the odd
+  case, and the search for the tightest ceiling shift for linear families; the AI
+  carried these out in Lean. The arbitrary-profile theorem
+  (Theorem~\ref{thm:profile}) was proposed by the AI and adopted by the author.
+  A record of these difficulties is kept in the file \texttt{CHALLENGES.md} of
+  the repository. The author decided which results to include, reviewed the
+  work, and ran every build; the formal proofs are checked by the Lean kernel.
+  The decision to submit the formalization to the Palomar registry, whose review
+  checks that the formal statements match the statements of this paper, was the
+  author's; it is registered as PALOMAR-2026-10-21-000015.
+\item The AI tools drafted and edited parts of the text from the author's
+  mathematical content.
+\end{itemize}
+The author takes full responsibility for the content of this paper.
 
 \newpage
 % ------------------------------------------------------------
